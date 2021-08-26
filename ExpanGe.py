@@ -9,7 +9,8 @@ import sys
 import getopt
 from util import Node, DoublyLinkedList, Gene
 
-def identify_inversions(linked_list: DoublyLinkedList):
+
+def identify_inversions(linked_list):
     """
     identify_inversions is a function designed to read through the lines in the .coord file and process all the data for later
     use. It identifies where the reversals occur and will set the values for any values that are to be ignored. Uses a
