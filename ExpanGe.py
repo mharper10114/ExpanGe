@@ -21,7 +21,7 @@ def identify_inversions(linked_list):
     head_node = linked_list.head
     inversion_count = 0
 
-    def identify_inversions_helper(root: Node):
+    def identify_inversions_helper(root):
         """
         Recursive helper function for the indentify_inversions function.
         Recusively loops through all nodes in the linked_list and records where inversions exist.
@@ -61,7 +61,7 @@ def identify_inversions(linked_list):
     identify_inversions_helper(head_node)
 
 
-def find_prev_valid(node: Node):
+def find_prev_valid(node):
     """
     Helper function that will take in a node and find the closest, previous node that
     is valid. This is used for calculating the distances between valid nodes.
@@ -79,7 +79,7 @@ def find_prev_valid(node: Node):
     return prev_node
 
 
-def find_next_not_inverted(node: Node) -> Node:
+def find_next_not_inverted(node) -> Node:
     """
     Search function that will find the next node in the data that is not inverted.
     :param node: Current node
@@ -94,7 +94,7 @@ def find_next_not_inverted(node: Node) -> Node:
         return None
 
 
-def find_next_valid(node: Node) -> Node:
+def find_next_valid(node) -> Node:
     """
     Search function that finds the next valid node in the linked list
     :param node: Current node
@@ -118,7 +118,7 @@ def calculate_distances(linked_list):
     :param linked_list: The data from the coords file
     :return: None
     """
-    def calculate_distances_helper(root: Node):
+    def calculate_distances_helper(root):
         if root is None:
             return None
 
