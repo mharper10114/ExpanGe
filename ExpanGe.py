@@ -176,6 +176,9 @@ def main(argv):
     options = "hio:"
     long_options = ["help", "input", "output"]
 
+    """
+    TO DO: Fix flag arguments to not only display help function
+    """
     try:
         flags, values = getopt.getopt(argument_list, options, long_options)
 
@@ -260,7 +263,6 @@ def main(argv):
     output.write(header)
 
     for line in lines:
-        output.write(line)
         curr_node = sequence.head
 
         if count > 5:
