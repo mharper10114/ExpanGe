@@ -92,6 +92,7 @@ def find_next_not_inverted(node: Node) -> Node:
     else:
         return None
 
+
 def find_next_valid(node: Node) -> Node:
     """
     Search function that finds the next valid node in the linked list
@@ -105,34 +106,6 @@ def find_next_valid(node: Node) -> Node:
             return find_next_valid(node.next)
     else:
         return None
-
-
-def inverted_distance(node: Node):
-    """
-    Helper function to be called when there is an inversion in the data. This will calculate the distances
-    for all inverted nodes. Function is called in the calculate_distances function when an inversion is
-    detected.
-    :param node: The inverted node
-    :return: None
-    """
-
-    inversion_head = node
-    inversion_tail = None
-
-    def inverted_distance_helper(curr: Node):
-        """
-        Recursive helper function for the inverted_distance function
-        :param curr: Current Node
-        :param tail: The tail node (initially set to None, changed when the tail node is discovered)
-        :return: None
-        """
-        pass
-        """
-        TO DO: Write inversion distance helper function
-        Find a way to store the head and tail of inversion to calculate delta values for those nodes
-        """
-
-    inverted_distance_helper(inversion_head)
 
 
 def calculate_distances(linked_list):
