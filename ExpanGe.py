@@ -135,7 +135,7 @@ def inverted_distance(node: Node):
     inverted_distance_helper(inversion_head)
 
 
-def calculate_distances(linked_list : DoublyLinkedList):
+def calculate_distances(linked_list):
     """
     Function to calculate the distances between each gene in the coords file.
     If a gene's previous gene is invalid, it will find the closest valid gene to calculate the
