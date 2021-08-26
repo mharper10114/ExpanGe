@@ -9,7 +9,6 @@ import sys
 import getopt
 from util import Node, DoublyLinkedList, Gene
 
-
 def identify_inversions(linked_list: DoublyLinkedList):
     """
     identify_inversions is a function designed to read through the lines in the .coord file and process all the data for later
@@ -93,6 +92,20 @@ def find_next_not_inverted(node: Node) -> Node:
     else:
         return None
 
+def find_next_valid(node: Node) -> Node:
+    """
+    Search function that finds the next valid node in the linked list
+    :param node: Current node
+    :return: The next valid node
+    """
+    if node is not None:
+        if node.value.ignore is False:
+            return node
+        else:
+            return find_next_valid(node.next)
+    else:
+        return None
+
 
 def inverted_distance(node: Node):
     """
@@ -102,10 +115,11 @@ def inverted_distance(node: Node):
     :param node: The inverted node
     :return: None
     """
+
     inversion_head = node
     inversion_tail = None
 
-    def inverted_distance_helper(curr: Node, tail: Node):
+    def inverted_distance_helper(curr: Node):
         """
         Recursive helper function for the inverted_distance function
         :param curr: Current Node
@@ -118,7 +132,7 @@ def inverted_distance(node: Node):
         Find a way to store the head and tail of inversion to calculate delta values for those nodes
         """
 
-    inverted_distance_helper(inversion_head, inversion_tail)
+    inverted_distance_helper(inversion_head)
 
 
 def calculate_distances(linked_list: DoublyLinkedList):
@@ -145,16 +159,20 @@ def calculate_distances(linked_list: DoublyLinkedList):
                 root.value.delta_q = "--"
                 root.value.delta_x = "--"
 
-            calculate_distances_helper(root.next)
         else:
-            inverted_distance(root)
-            next_node = find_next_not_inverted(root)
-
+            next_node = find_next_valid(root)
             if next_node is not None:
-                calculate_distances_helper(next_node.next)
+                root.value.delta_r = next_node.value.start1 - root.value.start1
+                root.value.delta_q = next_node.value.start2 - root.value.start2
+                root.value.delta_x = root.value.delta_r - root.value.delta_q
+            else:
+                root.value.delta_r = "--"
+                root.value.delta_q = "--"
+                root.value.delta_x = "--"
+
+        calculate_distances_helper(root.next)
 
     head_node = linked_list.head
-
     calculate_distances_helper(head_node)
 
 
@@ -272,6 +290,12 @@ def main(argv):
         curr_node = sequence.head
 
         if count > 5:
+            delta_r = str(curr_node.value.delta_r)
+            delta_q = str(curr_node.value.delta_q)
+            delta_x = str(curr_node.value.delta_x)
+            inversion_count = str(curr_node.value.inv_count)
+
+            line = line + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count
             output.write(line)
             '''
             TO DO: Add columns at end of line for calculated data
