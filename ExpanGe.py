@@ -173,7 +173,7 @@ def main(argv):
     output_name = "ExpanGeOutput.coords"
     sequence = DoublyLinkedList()
     argument_list = argv
-    options = "hio:"
+    options = "h:i:o:"
     long_options = ["help", "input", "output"]
 
     """
