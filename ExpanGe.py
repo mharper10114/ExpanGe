@@ -173,7 +173,7 @@ def main(argv):
     output_name = "ExpanGeOutput.coords"
     sequence = DoublyLinkedList()
     argument_list = argv
-    options = "h:i:o:"
+    options = "hi:o:"
     long_options = ["help", "input", "output"]
 
     """
@@ -260,7 +260,6 @@ def main(argv):
     # Go through each line in the input file and write the data to the output file
     # Add on the additional data calculated in this program at the end of each line
     curr_node = sequence.head
-    output.write(header)
 
     for line in lines:
         curr_node = sequence.head
@@ -271,7 +270,7 @@ def main(argv):
             delta_x = str(curr_node.value.delta_x)
             inversion_count = str(curr_node.value.inv_count)
 
-            line = line + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count
+            line = line - "\n" + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count + "\n"
             output.write(line)
             '''
             TO DO: Add columns at end of line for calculated data
