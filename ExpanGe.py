@@ -270,7 +270,9 @@ def main(argv):
             delta_x = str(curr_node.value.delta_x)
             inversion_count = str(curr_node.value.inv_count)
 
-            line = line - "\n" + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count + "\n"
+            line.rstrip("\n")
+
+            line = line + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count + "\n"
             output.write(line)
             '''
             TO DO: Add columns at end of line for calculated data
