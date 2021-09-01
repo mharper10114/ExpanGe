@@ -250,8 +250,8 @@ def main(argv):
             temp_gene.scaffold = line[97:].strip()
 
             # checking if a transposition has taken place, if there has been, ignore the line
-            if temp_gene.tag[12:] != temp_gene.scaffold:
-                temp_gene.ignore = True
+            # if temp_gene.tag[12:] != temp_gene.scaffold:
+                # temp_gene.ignore = True
 
             # checking for multiples of genes
             if temp_gene.start1 in start_positions:
