@@ -125,9 +125,19 @@ def calculate_distances(linked_list):
         if root.value.reversed is False:
             prev_node = find_prev_valid(root)
             if prev_node is not None:
+                """
                 root.value.delta_r = root.value.start1 - prev_node.value.end1
                 root.value.delta_q = root.value.start2 - prev_node.value.end2
                 root.value.delta_x = root.value.delta_r - root.value.delta_q
+                """
+
+                delta_r = root.value.start1 - prev_node.value.end1
+                root.value.delta_list.append(delta_r)
+                delta_q = root.value.start2 - prev_node.value.end2
+                root.value.delta_list.append(delta_q)
+                delta_x = delta_r - delta_q
+                root.value.delta_list.append(delta_x)
+
             else:
                 root.value.delta_r = "--"
                 root.value.delta_q = "--"
@@ -136,9 +146,18 @@ def calculate_distances(linked_list):
         else:
             next_node = find_next_valid(root)
             if next_node is not None:
+                """
                 root.value.delta_r = next_node.value.start1 - root.value.start1
                 root.value.delta_q = next_node.value.start2 - root.value.start2
                 root.value.delta_x = root.value.delta_r - root.value.delta_q
+                """
+
+                delta_r = next_node.value.start1 - root.value.end1
+                root.value.delta_list.append(delta_r)
+                delta_q = next_node.value.start2 - root.value.end2
+                root.value.delta_list.append(delta_q)
+                delta_x = delta_r - delta_q
+                root.value.delta_list.append(delta_x)
             else:
                 root.value.delta_r = "--"
                 root.value.delta_q = "--"
@@ -218,6 +237,7 @@ def main(argv):
             # setting the values for the gene class
             """
             TO DO: Rewrite string splicing to make universal for all .coords files
+            TO DO: Switch parsing over to tab delimited file
             """
             temp_gene.start1 = line[:7].strip()
             temp_gene.end1 = line[8:16].strip()
@@ -272,6 +292,10 @@ def main(argv):
             inversion_count = str(curr_node.value.inv_count)
 
             line.rstrip("\n")
+
+            """
+            TO DO: Fix output file formatting
+            """
 
             line = line + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count + "\n"
             output.write(line)
