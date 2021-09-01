@@ -260,6 +260,7 @@ def main(argv):
     # Go through each line in the input file and write the data to the output file
     # Add on the additional data calculated in this program at the end of each line
     curr_node = sequence.head
+    count = 0
 
     for line in lines:
         curr_node = sequence.head
@@ -278,6 +279,10 @@ def main(argv):
             TO DO: Add columns at end of line for calculated data
             '''
             curr_node = curr_node.next
+        else:
+            output.write(line)
+
+        count = count + 1
 
 
 if __name__ == "__main__":
