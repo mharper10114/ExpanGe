@@ -231,7 +231,7 @@ def main(argv):
     count = 0
 
     for line in lines:
-        if count > 5:
+        if count > 20:
             temp_gene = Gene()
 
             # setting the values for the gene class
