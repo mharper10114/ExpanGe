@@ -231,13 +231,14 @@ def main(argv):
     count = 0
 
     for line in lines:
-        if count > 20:
+        if count > 5:
             temp_gene = Gene()
 
             # setting the values for the gene class
             """
             TO DO: Rewrite string splicing to make universal for all .coords files
             TO DO: Switch parsing over to tab delimited file
+            """
             """
             temp_gene.start1 = int(line[:7].strip())
             temp_gene.end1 = int(line[8:16].strip())
@@ -248,6 +249,18 @@ def main(argv):
             temp_gene.IDY = line[62:70].strip()
             temp_gene.tag = line[74:96].strip()
             temp_gene.scaffold = line[97:].strip()
+            """
+            data_list = line.split()
+
+            temp_gene.start1 = int(data_list[0])
+            temp_gene.end1 = int(data_list[1])
+            temp_gene.start2 = int(data_list[2])
+            temp_gene.end2 = int(data_list[3])
+            temp_gene.length1 = int(data_list[4])
+            temp_gene.length2 = int(data_list[5])
+            temp_gene.IDY = data_list[6]
+            temp_gene.tag = data_list[7]
+            temp_gene.scaffold = data_list[8]
 
             # checking if a transposition has taken place, if there has been, ignore the line
             # if temp_gene.tag[12:] != temp_gene.scaffold:
@@ -297,14 +310,12 @@ def main(argv):
             TO DO: Fix output file formatting
             """
 
-            line = line + "\t" + delta_r + " | " + delta_q + " | " + delta_x + " | " + inversion_count + "\n"
+            line = line + "\t" + delta_r + "\t" + delta_q + "\t" + delta_x + "\t" + inversion_count + "\n"
             output.write(line)
             '''
             TO DO: Add columns at end of line for calculated data
             '''
             curr_node = curr_node.next
-        else:
-            output.write(line)
 
         count = count + 1
 
