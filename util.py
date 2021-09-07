@@ -183,7 +183,7 @@ class Gene:
         self.reversed = False
         # Flag to determine whether the software will ignore this gene
         self.ignore = False
-        """
+
         # The distance between the reference nodes (start1 - end1)
         self.delta_r = None
         # The distance between the query nodes (start2 - end2)
@@ -192,6 +192,4 @@ class Gene:
         self.delta_x = None
         # The number of inversion sections at this point
         self.inv_count = None
-        """
-        # List of the delta values calculated
-        self.delta_list = []
+

@@ -10,55 +10,46 @@ import getopt
 from util import Node, DoublyLinkedList, Gene
 
 
-def identify_inversions(linked_list):
+def identify_inversions(gene_sequence):
     """
-    identify_inversions is a function designed to read through the lines in the .coord file and process all the data for later
-    use. It identifies where the reversals occur and will set the values for any values that are to be ignored. Uses a
-    recursive helper function
-    :param linked_list: The linked_list holding all the lines of the file
+    identify_inversions is a function designed to read through the lines in the .coord file and process all the data for
+    later use. It identifies where the reversals occur and will set the values for any values that are to be ignored.
+
+    :param gene_sequence: The list holding all the values from the .coords file
     :return: None
     """
-    head_node = linked_list.head
     inversion_count = 0
 
-    def identify_inversions_helper(root):
-        """
-        Recursive helper function for the indentify_inversions function.
-        Recusively loops through all nodes in the linked_list and records where inversions exist.
-        :param root: The current node
-        :return: None
-        """
-        if root.value.ignore is True:
-            identify_inversions_helper(root.next)
-        else:
-            ignore_flag = False
-            end_flag = False
-            current_start = root.value.start1
-            next_node = root.next
+    for x in range(len(gene_sequence)):
+        if x != 0:
+            current = gene_sequence[x]
+            if current.ignore is False:
 
-            if next_node is None:
-                end_flag = True
+                ignore_flag = False
+                end_flag = False
 
-            while ignore_flag is False and end_flag is False:
-                if next_node.value.ignore is False:
-                    ignore_flag = True
-                else:
-                    next_node = next_node.next
-                    if next_node is None:
-                        end_flag = True
+                if x == (range(len(gene_sequence)) - 1):
+                    end_flag = True
 
-            if end_flag is False:
-                next_start = next_node.value.start1
+                iter = 1
+                next = gene_sequence[x+iter]
 
-                if next_start < current_start:
-                    next_node.value.reversed = True
-                    root.value.reversed = True
-                    root.value.inv_count = inversion_count
-                    next_node.value.inv_count = inversion_count
+                while ignore_flag is False and end_flag is False:
+                    if next.ignore is False:
+                        ignore_flag = True
+                    else:
+                        iter = iter + 1
+                        if iter + x == (range(len(gene_sequence))):
+                            end_flag = True
+                        next = gene_sequence[x+iter]
 
-                identify_inversions_helper(root.next)
+                if end_flag is False:
+                    start2 = next.start1
+                    start1 = current.start1
 
-    identify_inversions_helper(head_node)
+                    if start2 < start1:
+                        gene_sequence[x].reversed = True
+                        gene_sequence[x].inv_count = inversion_count
 
 
 def find_prev_valid(node):
@@ -190,7 +181,7 @@ def main(argv):
     """
     file_name = ""
     output_name = "ExpanGeOutput.coords"
-    sequence = DoublyLinkedList()
+    sequence = []
     argument_list = argv
     options = "hi:o:"
     long_options = ["help", "input", "output"]
@@ -278,7 +269,7 @@ def main(argv):
                 temp_gene.delta_q = "--"
                 temp_gene.inv_count = "--"
 
-            sequence.push(temp_gene)
+            sequence.append(temp_gene)
 
         else:
             header = header + line
@@ -292,17 +283,17 @@ def main(argv):
 
     # Go through each line in the input file and write the data to the output file
     # Add on the additional data calculated in this program at the end of each line
-    curr_node = sequence.head
+    iterator = 0
+    current = sequence[iterator]
     count = 0
 
     for line in lines:
-        curr_node = sequence.head
 
         if count > 5:
-            delta_r = str(curr_node.value.delta_r)
-            delta_q = str(curr_node.value.delta_q)
-            delta_x = str(curr_node.value.delta_x)
-            inversion_count = str(curr_node.value.inv_count)
+            delta_r = str(current.delta_r)
+            delta_q = str(current.delta_q)
+            delta_x = str(current.delta_x)
+            inversion_count = str(current.inv_count)
 
             line.rstrip("\n")
 
@@ -315,7 +306,8 @@ def main(argv):
             '''
             TO DO: Add columns at end of line for calculated data
             '''
-            curr_node = curr_node.next
+            iterator = iterator + 1
+            current = sequence[iterator]
 
         count = count + 1
 
