@@ -52,22 +52,23 @@ def identify_inversions(gene_sequence):
                         gene_sequence[x].inv_count = inversion_count
 
 
-def find_prev_valid(node):
+def find_prev_valid(genes, index):
     """
     Helper function that will take in a node and find the closest, previous node that
     is valid. This is used for calculating the distances between valid nodes.
-    :param node: A node containing data
+    :param genes: The gene sequence
+    :param index: A node containing data
     :return: The previous, valid node
     """
-    if node.prev is None:
+    new_index = index - 1
+
+    if new_index < 0:
         return None
 
-    prev_node = node.prev
-
-    if prev_node.value.ignore is True:
-        prev_node = find_prev_valid(prev_node)
-
-    return prev_node
+    while new_index >= 0:
+        if genes[new_index].ignore is False:
+            return new_index
+        new_index = new_index - 1
 
 
 def find_next_not_inverted(node) -> Node:
@@ -100,15 +101,32 @@ def find_next_valid(node) -> Node:
         return None
 
 
-def calculate_distances(linked_list):
+def calculate_distances(gene_sequence):
     """
     Function to calculate the distances between each gene in the coords file.
     If a gene's previous gene is invalid, it will find the closest valid gene to calculate the
     distance from.
     Utilizes a recursive helper function.
-    :param linked_list: The data from the coords file
+    :param gene_sequence: The data from the coords file
     :return: None
     """
+
+    for x in range(len(gene_sequence)):
+        if gene_sequence[x].ignore is False:
+
+            if gene_sequence[x].reversed is False:
+                previous_index = find_prev_valid(gene_sequence, x)
+                if previous_index is not None:
+                    gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
+                    gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
+                else:
+                    gene_sequence[x].delta_r = "--"
+                    gene_sequence[x].delta_q = "--"
+                    gene_sequence[x].delta_x = "--"
+            else:
+                pass
+
     def calculate_distances_helper(root):
         if root is None:
             return None
