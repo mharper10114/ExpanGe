@@ -29,11 +29,9 @@ def identify_inversions(gene_sequence):
                 end_flag = False
 
                 if x == (len(gene_sequence) - 1):
-                    end_flag = True
+                    return None
 
                 iter = 1
-                if (x + iter) >= len(gene_sequence):
-                    return None
                 next = gene_sequence[x+iter]
 
                 while ignore_flag is False and end_flag is False:
