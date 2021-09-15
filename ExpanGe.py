@@ -130,7 +130,7 @@ def calculate_distances(gene_sequence):
                 if previous_index is not None:
                     gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                     gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
-                    gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
                 else:
                     gene_sequence[x].delta_r = "--"
                     gene_sequence[x].delta_q = "--"
@@ -140,7 +140,7 @@ def calculate_distances(gene_sequence):
                 if next_index is not None:
                     gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
                     gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
-                    gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
                 else:
                     gene_sequence[x].delta_r = "--"
                     gene_sequence[x].delta_q = "--"
@@ -182,6 +182,7 @@ def main(argv):
         for current_flag, current_value in flags:
             if current_flag in ("-h", "--help"):
                 display_help()
+                return None
             elif current_flag in ("-i", "--input"):
                 file_name = current_value
             elif current_flag in ("-o", "--output"):
@@ -214,8 +215,7 @@ def main(argv):
 
             # setting the values for the gene class
             """
-            TO DO: Rewrite string splicing to make universal for all .coords files
-            TO DO: Switch parsing over to tab delimited file
+            TO DO: Add in transposition identifier code
             """
             data_list = line.split()
             if len(data_list) != 0:
@@ -262,6 +262,11 @@ def main(argv):
     iterator = 0
     current = sequence[iterator]
     count = 0
+
+    """
+    TO DO: Rewrite the output file code to make it's own line with the data stored
+    in the gene class rather than copy over the line
+    """
 
     for line in lines:
 
