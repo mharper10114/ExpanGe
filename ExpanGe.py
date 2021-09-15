@@ -217,16 +217,16 @@ def main(argv):
             TO DO: Switch parsing over to tab delimited file
             """
             data_list = line.split()
-            print(data_list)
-            temp_gene.start1 = int(data_list[0])
-            temp_gene.end1 = int(data_list[1])
-            temp_gene.start2 = int(data_list[2])
-            temp_gene.end2 = int(data_list[3])
-            temp_gene.length1 = int(data_list[4])
-            temp_gene.length2 = int(data_list[5])
-            temp_gene.IDY = data_list[6]
-            temp_gene.tag = data_list[7]
-            temp_gene.scaffold = data_list[8]
+            if len(data_list) != 0:
+                temp_gene.start1 = int(data_list[0])
+                temp_gene.end1 = int(data_list[1])
+                temp_gene.start2 = int(data_list[2])
+                temp_gene.end2 = int(data_list[3])
+                temp_gene.length1 = int(data_list[4])
+                temp_gene.length2 = int(data_list[5])
+                temp_gene.IDY = data_list[6]
+                temp_gene.tag = data_list[7]
+                temp_gene.scaffold = data_list[8]
 
             # checking if a transposition has taken place, if there has been, ignore the line
             # if temp_gene.tag[12:] != temp_gene.scaffold:
