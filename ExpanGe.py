@@ -229,23 +229,23 @@ def main(argv):
                 temp_gene.tag = data_list[7]
                 temp_gene.scaffold = data_list[8]
 
-            # checking if a transposition has taken place, if there has been, ignore the line
-            # if temp_gene.tag[12:] != temp_gene.scaffold:
+                # checking if a transposition has taken place, if there has been, ignore the line
+                # if temp_gene.tag[12:] != temp_gene.scaffold:
                 # temp_gene.ignore = True
 
-            # checking for multiples of genes
-            if temp_gene.start1 in start_positions:
-                temp_gene.ignore = True
-            else:
-                start_positions.add(temp_gene.start1)
+                # checking for multiples of genes
+                if temp_gene.start1 in start_positions:
+                    temp_gene.ignore = True
+                else:
+                    start_positions.add(temp_gene.start1)
 
-            if temp_gene.ignore is True:
-                temp_gene.delta_r = "--"
-                temp_gene.delta_x = "--"
-                temp_gene.delta_q = "--"
-                temp_gene.inv_count = "--"
+                if temp_gene.ignore is True:
+                    temp_gene.delta_r = "--"
+                    temp_gene.delta_x = "--"
+                    temp_gene.delta_q = "--"
+                    temp_gene.inv_count = "--"
 
-            sequence.append(temp_gene)
+                sequence.append(temp_gene)
 
         else:
             header = header + line
