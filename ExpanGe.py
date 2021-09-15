@@ -216,19 +216,8 @@ def main(argv):
             TO DO: Rewrite string splicing to make universal for all .coords files
             TO DO: Switch parsing over to tab delimited file
             """
-            """
-            temp_gene.start1 = int(line[:7].strip())
-            temp_gene.end1 = int(line[8:16].strip())
-            temp_gene.start2 = int(line[20:28].strip())
-            temp_gene.end2 = int(line[29:37].strip())
-            temp_gene.length1 = int(line[41:49].strip())
-            temp_gene.length2 = int(line[50:58].strip())
-            temp_gene.IDY = line[62:70].strip()
-            temp_gene.tag = line[74:96].strip()
-            temp_gene.scaffold = line[97:].strip()
-            """
             data_list = line.split()
-
+            print(data_list)
             temp_gene.start1 = int(data_list[0])
             temp_gene.end1 = int(data_list[1])
             temp_gene.start2 = int(data_list[2])
