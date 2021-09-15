@@ -70,6 +70,8 @@ def find_prev_valid(genes, index):
             return new_index
         new_index = new_index - 1
 
+    return None
+
 
 def find_next_not_inverted(node) -> Node:
     """
@@ -86,19 +88,24 @@ def find_next_not_inverted(node) -> Node:
         return None
 
 
-def find_next_valid(node) -> Node:
+def find_next_valid(genes, index):
     """
     Search function that finds the next valid node in the linked list
-    :param node: Current node
+    :param genes: Current node
+    :param index: temp
     :return: The next valid node
     """
-    if node is not None:
-        if node.value.ignore is False:
-            return node
-        else:
-            return find_next_valid(node.next)
-    else:
+    new_index = index + 1
+
+    if new_index == len(genes):
         return None
+
+    while new_index < len(genes):
+        if genes[new_index].ignore is False:
+            return new_index
+        new_index = new_index + 1
+
+    return None
 
 
 def calculate_distances(gene_sequence):
@@ -125,57 +132,15 @@ def calculate_distances(gene_sequence):
                     gene_sequence[x].delta_q = "--"
                     gene_sequence[x].delta_x = "--"
             else:
-                pass
-
-    def calculate_distances_helper(root):
-        if root is None:
-            return None
-
-        if root.value.reversed is False:
-            prev_node = find_prev_valid(root)
-            if prev_node is not None:
-                """
-                root.value.delta_r = root.value.start1 - prev_node.value.end1
-                root.value.delta_q = root.value.start2 - prev_node.value.end2
-                root.value.delta_x = root.value.delta_r - root.value.delta_q
-                """
-
-                delta_r = root.value.start1 - prev_node.value.end1
-                root.value.delta_list.append(delta_r)
-                delta_q = root.value.start2 - prev_node.value.end2
-                root.value.delta_list.append(delta_q)
-                delta_x = delta_r - delta_q
-                root.value.delta_list.append(delta_x)
-
-            else:
-                root.value.delta_r = "--"
-                root.value.delta_q = "--"
-                root.value.delta_x = "--"
-
-        else:
-            next_node = find_next_valid(root)
-            if next_node is not None:
-                """
-                root.value.delta_r = next_node.value.start1 - root.value.start1
-                root.value.delta_q = next_node.value.start2 - root.value.start2
-                root.value.delta_x = root.value.delta_r - root.value.delta_q
-                """
-
-                delta_r = next_node.value.start1 - root.value.end1
-                root.value.delta_list.append(delta_r)
-                delta_q = next_node.value.start2 - root.value.end2
-                root.value.delta_list.append(delta_q)
-                delta_x = delta_r - delta_q
-                root.value.delta_list.append(delta_x)
-            else:
-                root.value.delta_r = "--"
-                root.value.delta_q = "--"
-                root.value.delta_x = "--"
-
-        calculate_distances_helper(root.next)
-
-    head_node = linked_list.head
-    calculate_distances_helper(head_node)
+                next_index = find_next_valid(gene_sequence, x)
+                if next_index is not None:
+                    gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
+                    gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
+                else:
+                    gene_sequence[x].delta_r = "--"
+                    gene_sequence[x].delta_q = "--"
+                    gene_sequence[x].delta_x = "--"
 
 
 def display_help():
