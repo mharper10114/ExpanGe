@@ -19,7 +19,7 @@ def identify_inversions(gene_sequence):
     :return: None
     """
     inversion_count = 0
-
+    print(len(gene_sequence))
     for x in range(len(gene_sequence)):
         if x != 0:
             current = gene_sequence[x]
@@ -44,8 +44,8 @@ def identify_inversions(gene_sequence):
                         else:
                             next = gene_sequence[x+iter]
 
+                print(x)
                 print(next.start1)
-                print(current.start1)
 
                 if end_flag is False:
                     start2 = next.start1
