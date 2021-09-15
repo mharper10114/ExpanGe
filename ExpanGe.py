@@ -283,7 +283,8 @@ def main(argv):
             TO DO: Add columns at end of line for calculated data
             '''
             iterator = iterator + 1
-            current = sequence[iterator]
+            if iterator < len(sequence):
+                current = sequence[iterator]
 
         count = count + 1
 
