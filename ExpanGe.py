@@ -266,7 +266,7 @@ def main(argv):
 
     # Declare and initialize a pandas dataframe
     fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "Delta R", "Delta Q", "Delta X", "Inv. Count"]
-    dataframe = pd.Dataframe([vars(f) for f in sequence], columns = fields)
+    dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
 
     output.write(header)
     dataframe.to_csv(output, sep="\t", index=False, header=False)
