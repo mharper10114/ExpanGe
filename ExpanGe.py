@@ -20,6 +20,7 @@ def identify_inversions(gene_sequence):
     :return: None
     """
     inversion_count = 0
+    inv_flag = False
     for x in range(len(gene_sequence)):
         if x != 0:
             current = gene_sequence[x]
@@ -49,8 +50,13 @@ def identify_inversions(gene_sequence):
                     start1 = current.start1
 
                     if start2 < start1:
+                        if inv_flag is False:
+                            inversion_count = inversion_count + 1
+                            inv_flag = True
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
+                    else:
+                        inv_flag = False
 
 
 def find_prev_valid(genes, index):
@@ -225,9 +231,10 @@ def main(argv):
                 temp_gene.IDY = data_list[6]
                 temp_gene.tag = data_list[7]
                 temp_gene.scaffold = data_list[8]
+                temp_gene.inv_count = "--"
 
                 # checking if a transposition has taken place, if there has been, ignore the line
-                if temp_gene.tag[12:].strip() is not temp_gene.scaffold.strip():
+                if temp_gene.tag[12:].strip() != temp_gene.scaffold.strip():
                     temp_gene.ignore = True
 
                 # checking for multiples of genes
@@ -240,7 +247,6 @@ def main(argv):
                     temp_gene.delta_r = "--"
                     temp_gene.delta_x = "--"
                     temp_gene.delta_q = "--"
-                    temp_gene.inv_count = "--"
 
                 sequence.append(temp_gene)
 
