@@ -269,7 +269,7 @@ def main(argv):
     dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
 
     output.write(header)
-    dataframe.to_csv(output, sep="\t", index=False, header=False)
+    dataframe.to_csv(output, sep="\t", index=False, header=True)
 
 
 if __name__ == "__main__":
