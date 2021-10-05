@@ -183,7 +183,6 @@ class Gene:
         self.reversed = False
         # Flag to determine whether the software will ignore this gene
         self.ignore = False
-
         # The distance between the reference nodes (start1 - end1)
         self.delta_r = None
         # The distance between the query nodes (start2 - end2)

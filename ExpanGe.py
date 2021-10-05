@@ -20,7 +20,6 @@ def identify_inversions(gene_sequence):
     :return: None
     """
     inversion_count = 0
-    print(len(gene_sequence))
     for x in range(len(gene_sequence)):
         if x != 0:
             current = gene_sequence[x]
@@ -258,18 +257,11 @@ def main(argv):
     # Open the output file for writing, create it if it does not exist
     output = open(output_name, "w+")
 
-    # Go through each line in the input file and write the data to the output file
-    # Add on the additional data calculated in this program at the end of each line
-    iterator = 0
-    current = sequence[iterator]
-    count = 0
-
     # Declare and initialize a pandas dataframe
-    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "Delta R", "Delta Q", "Delta X", "Inv. Count"]
+    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "delta_r", "delta_q", "delta_x", "inv_count"]
     dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
 
-    output.write(header)
-    dataframe.to_csv(output, sep="\t", index=False, header=True)
+    dataframe.to_csv(output, sep="\t", index=False, header=False)
 
 
 if __name__ == "__main__":
