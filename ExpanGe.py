@@ -7,6 +7,7 @@ File: ExpanGe.py
 
 import sys
 import getopt
+import pandas as pd
 from util import Node, DoublyLinkedList, Gene
 
 
@@ -263,35 +264,12 @@ def main(argv):
     current = sequence[iterator]
     count = 0
 
-    """
-    TO DO: Rewrite the output file code to make it's own line with the data stored
-    in the gene class rather than copy over the line
-    """
+    # Declare and initialize a pandas dataframe
+    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "Delta R", "Delta Q", "Delta X", "Inv. Count"]
+    dataframe = pd.Dataframe([vars(f) for f in sequence], columns = fields)
 
-    for line in lines:
-
-        if count > 5:
-            delta_r = str(current.delta_r)
-            delta_q = str(current.delta_q)
-            delta_x = str(current.delta_x)
-            inversion_count = str(current.inv_count)
-
-            line.rstrip("\n")
-
-            """
-            TO DO: Fix output file formatting
-            """
-
-            line = line + "\t" + delta_r + "\t" + delta_q + "\t" + delta_x + "\t" + inversion_count + "\n"
-            output.write(line)
-            '''
-            TO DO: Add columns at end of line for calculated data
-            '''
-            iterator = iterator + 1
-            if iterator < len(sequence):
-                current = sequence[iterator]
-
-        count = count + 1
+    output.write(header)
+    dataframe.to_csv(output, sep="\t", index=False, header=False)
 
 
 if __name__ == "__main__":
