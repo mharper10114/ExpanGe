@@ -44,9 +44,6 @@ def identify_inversions(gene_sequence):
                         else:
                             next = gene_sequence[x+iter]
 
-                print(x)
-                print(next.start1)
-
                 if end_flag is False:
                     start2 = next.start1
                     start1 = current.start1
@@ -230,8 +227,8 @@ def main(argv):
                 temp_gene.scaffold = data_list[8]
 
                 # checking if a transposition has taken place, if there has been, ignore the line
-                # if temp_gene.tag[12:] != temp_gene.scaffold:
-                # temp_gene.ignore = True
+                if temp_gene.tag[12:].strip() is not temp_gene.scaffold.strip():
+                    temp_gene.ignore = True
 
                 # checking for multiples of genes
                 if temp_gene.start1 in start_positions:
