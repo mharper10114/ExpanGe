@@ -57,8 +57,8 @@ def identify_inversions(gene_sequence):
                             next = gene_sequence[x+iter]
 
                 if end_flag is False:
-                    start2 = next.start1
-                    start1 = current.start1
+                    start2 = next.start2
+                    start1 = current.start2
 
                     if start2 < start1:
                         if inv_flag is False:
