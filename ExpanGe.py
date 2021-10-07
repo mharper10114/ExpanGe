@@ -10,6 +10,17 @@ import getopt
 import pandas as pd
 from util import Node, DoublyLinkedList, Gene
 
+"""
+TO DO:
+- Implement way to detect head and tail of inversions for proper calculations
+- Add way to splice away the header and add on new columns
+- Clean up code (add comments, remove unnecessary code, remove old to do statements and comments)
+- Test program with larger file to determine runtime
+- Write display_help information
+- Write the Readme for the project
+- See if way to clean up the look of the output file
+"""
+
 
 def identify_inversions(gene_sequence):
     """
@@ -53,9 +64,12 @@ def identify_inversions(gene_sequence):
                         if inv_flag is False:
                             inversion_count = inversion_count + 1
                             inv_flag = True
+                            gene_sequence[x].inv_head = True
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
                     else:
+                        if inv_flag is True:
+                            gene_sequence[x].inv_tail = True
                         inv_flag = False
 
 
@@ -80,19 +94,44 @@ def find_prev_valid(genes, index):
     return None
 
 
-def find_next_not_inverted(node) -> Node:
+def find_next_not_inverted(genes, index):
     """
     Search function that will find the next node in the data that is not inverted.
-    :param node: Current node
-    :return: The not inverted node
+    :param genes: The gene sequence
+    :param index: The index of the current gene
+    :return: the index of the next not inverted gene
     """
-    if node is not None:
-        if node.value.reversed is True:
-            return find_next_not_inverted(node.next)
-        else:
-            return node
-    else:
+    new_index = index + 1
+
+    if new_index == len(genes):
         return None
+
+    while new_index < len(genes):
+        if genes[new_index].ignore is False and genes[new_index].reversed is False:
+            return new_index
+        new_index = new_index + 1
+
+    return None
+
+
+def find_prev_not_inverted(genes, index):
+    """
+    Search function that will find the previous gene that is not inverted.
+    :param genes: The gene sequence
+    :param index: The index of the current gene
+    :return: The index of the prev not inverted gene
+    """
+    new_index = index - 1
+
+    if new_index < 0:
+        return None
+
+    while new_index >= 0:
+        if genes[new_index].ignore is False and genes[new_index].reversed is False:
+            return new_index
+        new_index = new_index - 1
+
+    return None
 
 
 def find_next_valid(genes, index):
@@ -139,15 +178,36 @@ def calculate_distances(gene_sequence):
                     gene_sequence[x].delta_q = "--"
                     gene_sequence[x].delta_x = "--"
             else:
-                next_index = find_next_valid(gene_sequence, x)
-                if next_index is not None:
-                    gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
-                    gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
-                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                if gene_sequence[x].inv_head is True:
+                    next_index = find_next_not_inverted(gene_sequence, x)
+                    if next_index is not None:
+                        gene_sequence[next_index].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
+                        gene_sequence[next_index].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
+                        gene_sequence[next_index].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                    else:
+                        gene_sequence[next_index].delta_r = "--"
+                        gene_sequence[next_index].delta_q = "--"
+                        gene_sequence[next_index].delta_x = "--"
+                elif gene_sequence[x].inv_tail is True:
+                    previous_index = find_prev_not_inverted(gene_sequence, x)
+                    if previous_index is not None:
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
+                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
+                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                    else:
+                        gene_sequence[x].delta_r = "--"
+                        gene_sequence[x].delta_q = "--"
+                        gene_sequence[x].delta_x = "--"
                 else:
-                    gene_sequence[x].delta_r = "--"
-                    gene_sequence[x].delta_q = "--"
-                    gene_sequence[x].delta_x = "--"
+                    next_index = find_next_valid(gene_sequence, x)
+                    if next_index is not None:
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[next_index].end1
+                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                    else:
+                        gene_sequence[x].delta_r = "--"
+                        gene_sequence[x].delta_q = "--"
+                        gene_sequence[x].delta_x = "--"
 
 
 def display_help():

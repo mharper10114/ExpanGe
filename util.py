@@ -191,4 +191,8 @@ class Gene:
         self.delta_x = None
         # The number of inversion sections at this point
         self.inv_count = None
+        # Inversion head flag
+        self.inv_head = False
+        # Inversion tail flag
+        self.inv_tail = False
 
