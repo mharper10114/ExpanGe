@@ -19,6 +19,8 @@ TO DO:
 - Write display_help information
 - Write the Readme for the project
 - See if way to clean up the look of the output file
+- Add limit flag for delta_q values
+- Fix inverted distance calculations
 """
 
 
@@ -183,7 +185,7 @@ def calculate_distances(gene_sequence):
                     if next_index is not None:
                         gene_sequence[next_index].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
                         gene_sequence[next_index].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
-                        gene_sequence[next_index].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                        gene_sequence[next_index].delta_x = gene_sequence[next_index].delta_q - gene_sequence[next_index].delta_r
                     else:
                         gene_sequence[next_index].delta_r = "--"
                         gene_sequence[next_index].delta_q = "--"
