@@ -187,9 +187,9 @@ def calculate_distances(gene_sequence):
                         gene_sequence[next_index].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
                         gene_sequence[next_index].delta_x = gene_sequence[next_index].delta_q - gene_sequence[next_index].delta_r
                     else:
-                        gene_sequence[next_index].delta_r = "--"
-                        gene_sequence[next_index].delta_q = "--"
-                        gene_sequence[next_index].delta_x = "--"
+                        gene_sequence[x].delta_r = "--"
+                        gene_sequence[x].delta_q = "--"
+                        gene_sequence[x].delta_x = "--"
                 elif gene_sequence[x].inv_tail is True:
                     previous_index = find_prev_not_inverted(gene_sequence, x)
                     if previous_index is not None:
