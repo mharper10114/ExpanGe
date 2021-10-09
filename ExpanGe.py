@@ -185,7 +185,7 @@ def calculate_distances(gene_sequence):
                     if next_index is not None:
                         gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
                         gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
-                        gene_sequence[x].delta_x = gene_sequence[next_index].delta_q - gene_sequence[next_index].delta_r
+                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
                     else:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
