@@ -12,7 +12,7 @@ from util import Gene
 
 """
 TO DO:
-- Implement way to detect head and tail of inversions for proper calculations
+- Implement way to detect head and tail of inversions for proper calculations (DONE)
 - Add way to splice away the header and add on new columns
 - Clean up code (add comments, remove unnecessary code, remove old to do statements and comments)
 - Test program with larger file to determine runtime
@@ -20,7 +20,7 @@ TO DO:
 - Write the Readme for the project
 - See if way to clean up the look of the output file
 - Add limit flag for delta_q values
-- Fix inverted distance calculations
+- Fix inverted distance calculations (DONE)
 """
 
 
@@ -238,9 +238,6 @@ def main(argv):
     options = "hi:o:"
     long_options = ["help", "input", "output"]
 
-    """
-    TO DO: Fix flag arguments to not only display help function
-    """
     try:
         flags, values = getopt.getopt(argument_list, options, long_options)
 
@@ -271,50 +268,43 @@ def main(argv):
 
     lines = data_file.readlines()
     start_positions = set()
-    header = ""
     count = 0
 
     for line in lines:
-        if count > 5:
-            temp_gene = Gene()
+        temp_gene = Gene()
 
-            # setting the values for the gene class
-            """
-            TO DO: Add in transposition identifier code
-            """
-            data_list = line.split()
-            if len(data_list) != 0:
-                temp_gene.start1 = int(data_list[0])
-                temp_gene.end1 = int(data_list[1])
-                temp_gene.start2 = int(data_list[2])
-                temp_gene.end2 = int(data_list[3])
-                temp_gene.length1 = int(data_list[4])
-                temp_gene.length2 = int(data_list[5])
-                temp_gene.IDY = data_list[6]
-                temp_gene.tag = data_list[7]
-                temp_gene.scaffold = data_list[8]
-                temp_gene.inv_count = "--"
+        # setting the values for the gene class
+        data_list = line.split()
+        if len(data_list) != 0:
+        temp_gene.start1 = int(data_list[0])
+        temp_gene.end1 = int(data_list[1])
+        temp_gene.start2 = int(data_list[2])
+        temp_gene.end2 = int(data_list[3])
+        temp_gene.length1 = int(data_list[4])
+        temp_gene.length2 = int(data_list[5])
+        temp_gene.IDY = data_list[6]
+        temp_gene.tag = data_list[7]
+        temp_gene.scaffold = data_list[8]
+        temp_gene.inv_count = "--"
 
-                # checking if a transposition has taken place, if there has been, ignore the line
-                if temp_gene.tag[12:].strip() != temp_gene.scaffold.strip():
-                    temp_gene.ignore = True
+        # checking if a transposition has taken place, if there has been, ignore the line
+        if temp_gene.tag[12:].strip() != temp_gene.scaffold.strip():
+            temp_gene.ignore = True
 
-                # checking for multiples of genes
-                if temp_gene.start1 in start_positions:
-                    temp_gene.ignore = True
-                else:
-                    start_positions.add(temp_gene.start1)
-
-                if temp_gene.ignore is True:
-                    temp_gene.delta_r = "--"
-                    temp_gene.delta_x = "--"
-                    temp_gene.delta_q = "--"
-
-                sequence.append(temp_gene)
-
+        # checking for multiples of genes
+        if temp_gene.start1 in start_positions:
+            temp_gene.ignore = True
         else:
-            header = header + line
-            count = count + 1
+            start_positions.add(temp_gene.start1)
+
+        if temp_gene.ignore is True:
+            temp_gene.delta_r = "--"
+            temp_gene.delta_x = "--"
+            temp_gene.delta_q = "--"
+
+        sequence.append(temp_gene)
+
+        count = count + 1
 
     identify_inversions(sequence)
     calculate_distances(sequence)
@@ -326,7 +316,7 @@ def main(argv):
     fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "delta_r", "delta_q", "delta_x", "inv_count"]
     dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
     dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
-    dataframe.to_csv(output, sep="\t", index=False, header=True)
+    dataframe.to_csv(output, sep="\t", index=False, header=False)
 
 
 if __name__ == "__main__":
