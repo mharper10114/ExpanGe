@@ -8,7 +8,7 @@ File: ExpanGe.py
 import sys
 import getopt
 import pandas as pd
-from util import Node, DoublyLinkedList, Gene
+from util import Gene
 
 """
 TO DO:
@@ -46,23 +46,23 @@ def identify_inversions(gene_sequence):
                     return None
 
                 iter = 1
-                next = gene_sequence[x+iter]
+                prev = gene_sequence[x-iter]
 
                 while ignore_flag is False and end_flag is False:
-                    if next.ignore is False:
+                    if prev.ignore is False:
                         ignore_flag = True
                     else:
                         iter = iter + 1
-                        if (iter + x) >= len(gene_sequence):
+                        if (x-iter) >= 0:
                             end_flag = True
                         else:
-                            next = gene_sequence[x+iter]
+                            prev = gene_sequence[x-iter]
 
                 if end_flag is False:
-                    start2 = next.start2
+                    start2 = prev.start2
                     start1 = current.start2
 
-                    if start2 < start1:
+                    if start2 > start1:
                         if inv_flag is False:
                             inversion_count = inversion_count + 1
                             inv_flag = True
