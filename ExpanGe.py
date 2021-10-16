@@ -8,7 +8,7 @@ File: ExpanGe.py
 import sys
 import getopt
 import pandas as pd
-from util import Gene
+from util import Gene, GeneMap
 
 """
 TO DO:
@@ -19,8 +19,11 @@ TO DO:
 - Write display_help information
 - Write the Readme for the project
 - See if way to clean up the look of the output file
-- Add limit flag for delta_q values
+- Find way to deal with outlier of data
+    - Diagonal chaining
+    - Average distance
 - Fix inverted distance calculations (DONE)
+- Gene Map implementation (EMAIL)
 """
 
 
@@ -32,7 +35,7 @@ def identify_inversions(gene_sequence):
     :param gene_sequence: The list holding all the values from the .coords file
     :return: None
     """
-    inversion_count = 0
+    inversion_count = 1
     inv_flag = False
     for x in range(len(gene_sequence)):
         if x != 0:
@@ -231,12 +234,14 @@ def main(argv):
     :param argv: The argument list
     :return: None
     """
-    file_name = ""
+    file_name = None
     output_name = "ExpanGeOutput.coords"
     sequence = []
     argument_list = argv
-    options = "hi:o:"
-    long_options = ["help", "input", "output"]
+    options = "hi:o:g:"
+    long_options = ["help", "input", "output", "geneMap"]
+    gene_map = GeneMap
+    gene_map_filename = None
 
     try:
         flags, values = getopt.getopt(argument_list, options, long_options)
@@ -247,14 +252,27 @@ def main(argv):
                 return None
             elif current_flag in ("-i", "--input"):
                 file_name = current_value
+            elif current_flag in ("-g", "--geneMap"):
+                gene_map_filename = current_value
             elif current_flag in ("-o", "--output"):
                 output_name = current_value
 
     except getopt.error as err:
         print(str(err))
 
-    if file_name == "":
+    if file_name is None or file_name == "":
         display_help()
+        return None
+
+    if gene_map_filename is None or gene_map_filename == "":
+        print("No gene map data inputted.")
+        print("Gene map must be created and inputted in the command line for proper calculations.")
+        print("Help information displayed below.\n")
+        display_help()
+        return None
+
+    gene_map.create_map(gene_map_filename)
+    if gene_map.map is None:
         return None
 
     # Opens the file and reads through each line.
@@ -276,19 +294,20 @@ def main(argv):
         # setting the values for the gene class
         data_list = line.split()
         if len(data_list) != 0:
-        temp_gene.start1 = int(data_list[0])
-        temp_gene.end1 = int(data_list[1])
-        temp_gene.start2 = int(data_list[2])
-        temp_gene.end2 = int(data_list[3])
-        temp_gene.length1 = int(data_list[4])
-        temp_gene.length2 = int(data_list[5])
-        temp_gene.IDY = data_list[6]
-        temp_gene.tag = data_list[7]
-        temp_gene.scaffold = data_list[8]
-        temp_gene.inv_count = "--"
+            temp_gene.start1 = int(data_list[0])
+            temp_gene.end1 = int(data_list[1])
+            temp_gene.start2 = int(data_list[2])
+            temp_gene.end2 = int(data_list[3])
+            temp_gene.length1 = int(data_list[4])
+            temp_gene.length2 = int(data_list[5])
+            temp_gene.IDY = data_list[6]
+            temp_gene.tag = data_list[7]
+            temp_gene.scaffold = data_list[8]
+            temp_gene.inv_count = "--"
 
         # checking if a transposition has taken place, if there has been, ignore the line
-        if temp_gene.tag[12:].strip() != temp_gene.scaffold.strip():
+        same_flag = gene_map.same_chromosome(temp_gene.start1, temp_gene.start2)
+        if same_flag is False:
             temp_gene.ignore = True
 
         # checking for multiples of genes
@@ -316,7 +335,7 @@ def main(argv):
     fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "delta_r", "delta_q", "delta_x", "inv_count"]
     dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
     dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
-    dataframe.to_csv(output, sep="\t", index=False, header=False)
+    dataframe.to_csv(output, sep="\t", index=False, header=True)
 
 
 if __name__ == "__main__":

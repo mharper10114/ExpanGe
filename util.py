@@ -55,3 +55,58 @@ class Gene:
         # Inversion tail flag
         self.inv_tail = False
 
+
+class GeneMap:
+    """
+    GeneMap class code
+    A utility class used to create a gene map that identifies which chromosome a mum in the
+    sequence exists on. If the reference mum and query mum exist on different chromosomes
+    then the line is marked as a transposition and ignored in calculations
+    """
+    def __init__(self):
+        # Stores a dictionary with the chromosome number being the key and
+        # the value being a tuple with the end positions for the chromosomes
+        # on the reference and the query
+        self.map = None
+
+    def create_map(self, filename):
+        try:
+            map_file = open(filename, 'r')
+        except FileNotFoundError:
+            print("Error: The inputted file was not found or could not be opened.")
+            print("EXITING PROGRAM")
+            return None
+
+        lines = map_file.readlines()
+        temp_map = {}
+        count = 0
+        ref_size = 0
+        query_size = 0
+
+        for line in lines:
+            if count != 0:
+                chrom = "Chr" + str(count)
+                line_data = line.split()
+                temp_ref = int(line_data[1])
+                temp_query = int(lines_data[3])
+
+                ref_size = ref_size + temp_ref
+                query_size = query_size + temp_query
+
+                tup = (ref_size, query_size)
+
+                temp_map[chrom] = tup
+
+            count = count + 1
+
+        self.map = temp_map
+
+    def same_chromosome(self, ref_pos, query_pos):
+        for key, val in self.map.items():
+            if ref_pos < val[0]:
+                if query_pos < val[1]:
+                    return True
+                else:
+                    return False
+
+        return False
