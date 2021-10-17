@@ -2,7 +2,10 @@
 Author: Matthew Harper
 File: ExpanGe.py
 
-
+The main python script for the ExpanGe program.
+ExpanGe is a bioinformatics tool that is used to analyze a comparison of a series of mums
+and identify whether there is an expansion or contraction of the distances between the mums
+and whether an inversion occurs in the sequence.
 """
 
 import sys
@@ -13,7 +16,7 @@ from util import Gene, GeneMap
 """
 TO DO:
 - Implement way to detect head and tail of inversions for proper calculations (DONE)
-- Add way to splice away the header and add on new columns
+- Add way to splice away the header and add on new columns (DONE)
 - Clean up code (add comments, remove unnecessary code, remove old to do statements and comments)
 - Test program with larger file to determine runtime
 - Write display_help information
@@ -24,6 +27,7 @@ TO DO:
     - Average distance
 - Fix inverted distance calculations (DONE)
 - Gene Map implementation (EMAIL)
+- Make universal way to detect transpositions (DONE)
 """
 
 
@@ -80,11 +84,10 @@ def identify_inversions(gene_sequence):
 
 def find_prev_valid(genes, index):
     """
-    Helper function that will take in a node and find the closest, previous node that
-    is valid. This is used for calculating the distances between valid nodes.
+    Search function that will take in a node and find the closest, previous mum that is valid.
     :param genes: The gene sequence
-    :param index: A node containing data
-    :return: The previous, valid node
+    :param index: Index of current mum
+    :return: The previous, valid mum
     """
     new_index = index - 1
 
@@ -101,10 +104,10 @@ def find_prev_valid(genes, index):
 
 def find_next_not_inverted(genes, index):
     """
-    Search function that will find the next node in the data that is not inverted.
+    Search function that will find the next mum in the data that is not inverted
     :param genes: The gene sequence
-    :param index: The index of the current gene
-    :return: the index of the next not inverted gene
+    :param index: The index of the current mum
+    :return: the index of the next not inverted mum
     """
     new_index = index + 1
 
@@ -121,10 +124,10 @@ def find_next_not_inverted(genes, index):
 
 def find_prev_not_inverted(genes, index):
     """
-    Search function that will find the previous gene that is not inverted.
+    Search function that will find the previous mum that is not inverted.
     :param genes: The gene sequence
-    :param index: The index of the current gene
-    :return: The index of the prev not inverted gene
+    :param index: The index of the current mum
+    :return: The index of the prev not inverted mum
     """
     new_index = index - 1
 
@@ -142,9 +145,9 @@ def find_prev_not_inverted(genes, index):
 def find_next_valid(genes, index):
     """
     Search function that finds the next valid node in the linked list
-    :param genes: Current node
-    :param index: temp
-    :return: The next valid node
+    :param genes: Gene sequence
+    :param index: Current index
+    :return: Index of next valid mum
     """
     new_index = index + 1
 
@@ -171,7 +174,7 @@ def calculate_distances(gene_sequence):
 
     for x in range(len(gene_sequence)):
         if gene_sequence[x].ignore is False:
-
+            # Distance calculation for non inverted mum
             if gene_sequence[x].reversed is False:
                 previous_index = find_prev_valid(gene_sequence, x)
                 if previous_index is not None:
@@ -182,7 +185,9 @@ def calculate_distances(gene_sequence):
                     gene_sequence[x].delta_r = "--"
                     gene_sequence[x].delta_q = "--"
                     gene_sequence[x].delta_x = "--"
+            # Distance calculations for inversions
             else:
+                # Distance calculation for head of the inversion
                 if gene_sequence[x].inv_head is True:
                     next_index = find_next_not_inverted(gene_sequence, x)
                     if next_index is not None:
@@ -193,6 +198,7 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
                         gene_sequence[x].delta_x = "--"
+                # Distance calculation for tail of the inversion
                 elif gene_sequence[x].inv_tail is True:
                     previous_index = find_prev_not_inverted(gene_sequence, x)
                     if previous_index is not None:
@@ -203,6 +209,7 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
                         gene_sequence[x].delta_x = "--"
+                # Distance calculation for standard inverted mum
                 else:
                     next_index = find_next_valid(gene_sequence, x)
                     prev_index = find_prev_valid(gene_sequence, x)

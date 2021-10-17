@@ -70,6 +70,11 @@ class GeneMap:
         self.map = None
 
     def create_map(self, filename):
+        """
+        Function to create and the store the dictionary of the chromosome sizes
+        :param filename: The filename of the gene map data
+        :return: None
+        """
         try:
             map_file = open(filename, 'r')
         except FileNotFoundError:
@@ -80,8 +85,6 @@ class GeneMap:
         lines = map_file.readlines()
         temp_map = {}
         count = 0
-        ref_size = 0
-        query_size = 0
 
         for line in lines:
             if count != 0:
@@ -90,10 +93,7 @@ class GeneMap:
                 temp_ref = int(line_data[1])
                 temp_query = int(line_data[3])
 
-                ref_size = ref_size + temp_ref
-                query_size = query_size + temp_query
-
-                tup = (ref_size, query_size)
+                tup = (temp_ref, temp_query)
 
                 temp_map[chrom] = tup
 
@@ -102,6 +102,13 @@ class GeneMap:
         self.map = temp_map
 
     def same_chromosome(self, ref_pos, query_pos):
+        """
+        Comparison function to determine if the reference mum and the query mum exist on
+        the same chromosome number. Used to determine if transposition has occurred.
+        :param ref_pos: The position of the reference mum
+        :param query_pos: The position of the query mum
+        :return: True or False
+        """
         for key, val in self.map.items():
             if ref_pos < val[0]:
                 if query_pos < val[1]:
