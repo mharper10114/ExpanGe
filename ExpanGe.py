@@ -35,7 +35,7 @@ def identify_inversions(gene_sequence):
     :param gene_sequence: The list holding all the values from the .coords file
     :return: None
     """
-    inversion_count = 1
+    inversion_count = 0
     inv_flag = False
     for x in range(len(gene_sequence)):
         if x != 0:
@@ -205,8 +205,9 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_x = "--"
                 else:
                     next_index = find_next_valid(gene_sequence, x)
+                    prev_index = find_prev_valid(gene_sequence, x)
                     if next_index is not None:
-                        gene_sequence[x].delta_r = gene_sequence[next_index].end1 - gene_sequence[x].start1
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
                     else:
@@ -240,7 +241,7 @@ def main(argv):
     argument_list = argv
     options = "hi:o:g:"
     long_options = ["help", "input", "output", "geneMap"]
-    gene_map = GeneMap
+    gene_map = GeneMap()
     gene_map_filename = None
 
     try:

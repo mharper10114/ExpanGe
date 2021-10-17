@@ -88,7 +88,7 @@ class GeneMap:
                 chrom = "Chr" + str(count)
                 line_data = line.split()
                 temp_ref = int(line_data[1])
-                temp_query = int(lines_data[3])
+                temp_query = int(line_data[3])
 
                 ref_size = ref_size + temp_ref
                 query_size = query_size + temp_query
