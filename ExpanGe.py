@@ -184,14 +184,19 @@ def calculate_distances(gene_sequence,cutoff=5e6):
                     """
                     Add Cutoff check here if outside sensible size for cutoff then 
                     Something like below.
-                    cutoff could also be designated based on some function of query length
-                    if gene_sequence[x].delta_r > cutoff or gene_sequence[x].delta_q > cutoff:
-                        gene_sequence[x].ignore = True
+                    cutoff could also be designated based on some function of query length, though at this point 
+                    We can eye ball it for now.
+                    if abs(gene_sequence[x].delta_r) >= cutoff or abs(gene_sequence[x].delta_q) >= cutoff:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
                         gene_sequence[x].delta_x = "--"
                     """
                 else:
+                    """
+                    When the class is instantiated why not just set this as  the default, or create a 
+                    function that prints all None Type fields as designated output?
+                    """
+
                     gene_sequence[x].delta_r = "--"
                     gene_sequence[x].delta_q = "--"
                     gene_sequence[x].delta_x = "--"
