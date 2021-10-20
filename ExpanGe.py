@@ -162,7 +162,7 @@ def find_next_valid(genes, index):
     return None
 
 
-def calculate_distances(gene_sequence):
+def calculate_distances(gene_sequence,cutoff=5e6):
     """
     Function to calculate the distances between each gene in the coords file.
     If a gene's previous gene is invalid, it will find the closest valid gene to calculate the
@@ -181,6 +181,16 @@ def calculate_distances(gene_sequence):
                     gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                     gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                     gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                    """
+                    Add Cutoff check here if outside sensible size for cutoff then 
+                    Something like below.
+                    cutoff could also be designated based on some function of query length
+                    if gene_sequence[x].delta_r > cutoff or gene_sequence[x].delta_q > cutoff:
+                        gene_sequence[x].ignore = True
+                        gene_sequence[x].delta_r = "--"
+                        gene_sequence[x].delta_q = "--"
+                        gene_sequence[x].delta_x = "--"
+                    """
                 else:
                     gene_sequence[x].delta_r = "--"
                     gene_sequence[x].delta_q = "--"
@@ -194,6 +204,11 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
                         gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                        """
+                        Add same cutoff check Looks like we will need a function
+                        
+                        """
+
                     else:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
@@ -205,6 +220,9 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                        """
+                        Cutoff check here
+                        """
                     else:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
@@ -217,6 +235,9 @@ def calculate_distances(gene_sequence):
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                        """
+                        Cut Off check
+                        """
                     else:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
@@ -314,7 +335,12 @@ def main(argv):
             temp_gene.inv_count = "--"
 
         # checking if a transposition has taken place, if there has been, ignore the line
-        same_flag = gene_map.same_chromosome(temp_gene.start1, temp_gene.start2)
+        # To Do: standarized file input, it looks like mums columns are differ based on output
+
+        same_flag = gene_map.same_chromosome(ref_chrom=temp_gene.ref_chr,
+                                             ref_pos=temp_gene.start1,
+                                             query_chrom=temp_gene.query_chr,
+                                             query_pos=temp_gene.start2)
         if same_flag is False:
             temp_gene.ignore = True
 
