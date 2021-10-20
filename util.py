@@ -38,6 +38,10 @@ class Gene:
         self.tag = None
         # TEMP
         self.scaffold = None
+        # reference chromosome
+        self.ref_chr = None
+        # Query chromosome
+        self.query_chr = None
         # Flag to determine if the gene is inverted
         self.reversed = False
         # Flag to determine whether the software will ignore this gene
@@ -66,7 +70,7 @@ class GeneMap:
     Takes as input file in the following format:
 
     Example:
-    ref_chrom  ref_len  query_chrom query_len
+    #ref_chrom  ref_len  query_chrom query_len
     chr1    2000    ChR1A   3000
 
     More:
@@ -129,7 +133,7 @@ class GeneMap:
         :return: True or False
         """
         return_bool = False
-        if ref_chrom in self.map :
+        if ref_chrom in self.map:
             ref_len, expected_query_chrom, query_len = self.map[ref_chrom]
             if query_chrom == expected_query_chrom:
                 if ref_pos < ref_len:
