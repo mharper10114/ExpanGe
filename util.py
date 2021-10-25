@@ -34,10 +34,6 @@ class Gene:
         self.length2 = None
         # TEMP
         self.IDY = None
-        # TEMP
-        self.tag = None
-        # TEMP
-        self.scaffold = None
         # reference chromosome
         self.ref_chr = None
         # Query chromosome

@@ -335,10 +335,8 @@ def main(argv):
             temp_gene.length1 = int(data_list[4])
             temp_gene.length2 = int(data_list[5])
             temp_gene.IDY = data_list[6]
-            temp_gene.tag = data_list[7]
-            temp_gene.scaffold = data_list[8]
-            temp_gene.ref_chr = data_list[11]
-            temp_gene.query_chr = data_list[12]
+            temp_gene.ref_chr = data_list[7]
+            temp_gene.query_chr = data_list[8]
             temp_gene.inv_count = "--"
 
         # checking if a transposition has taken place, if there has been, ignore the line
