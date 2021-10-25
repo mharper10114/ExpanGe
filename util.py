@@ -38,6 +38,10 @@ class Gene:
         self.tag = None
         # TEMP
         self.scaffold = None
+        # reference chromosome
+        self.ref_chr = None
+        # Query chromosome
+        self.query_chr = None
         # Flag to determine if the gene is inverted
         self.reversed = False
         # Flag to determine whether the software will ignore this gene
@@ -62,6 +66,21 @@ class GeneMap:
     A utility class used to create a gene map that identifies which chromosome a mum in the
     sequence exists on. If the reference mum and query mum exist on different chromosomes
     then the line is marked as a transposition and ignored in calculations
+
+    Takes as input file in the following format:
+
+    Example:
+    #ref_chrom  ref_len  query_chrom query_len
+    chr1    2000    ChR1A   3000
+
+    More:
+    ref_chrom :: str name given by user can be anything but must exactly match the name that appears in mum file
+    ref_len :: int length of sequence/contig/chromosome
+    query_chrom :: str name given by user can be anything but must exactly match the name that appears in mum file
+    query_len :: int  length of sequence/contig/chromsome
+
+
+
     """
     def __init__(self):
         # Stores a dictionary with the chromosome number being the key and
@@ -84,24 +103,28 @@ class GeneMap:
 
         lines = map_file.readlines()
         temp_map = {}
-        count = 0
+        count = 0 # looks like this being done skip a header. We can do this by slicing lines  as well. But I don't want
+                  # to mess with this too much just yet.
 
         for line in lines:
             if count != 0:
-                chrom = "Chr" + str(count)
+                #chrom = "Chr" + str(count)
+                #chrom will go unused  in this version
                 line_data = line.split()
+                temp_ref_chrom = line_data[0]
                 temp_ref = int(line_data[1])
+                temp_query_chrom = line_data[2]
                 temp_query = int(line_data[3])
 
-                tup = (temp_ref, temp_query)
+                tup = (temp_ref, temp_query_chrom, temp_query)
 
-                temp_map[chrom] = tup
+                temp_map[temp_ref_chrom] = tup
 
             count = count + 1
 
         self.map = temp_map
 
-    def same_chromosome(self, ref_pos, query_pos):
+    def same_chromosome(self, ref_chrom, ref_pos, query_chrom, query_pos):
         """
         Comparison function to determine if the reference mum and the query mum exist on
         the same chromosome number. Used to determine if transposition has occurred.
@@ -109,11 +132,15 @@ class GeneMap:
         :param query_pos: The position of the query mum
         :return: True or False
         """
-        for key, val in self.map.items():
-            if ref_pos < val[0]:
-                if query_pos < val[1]:
-                    return True
-                else:
-                    return False
+        return_bool = False
+        if ref_chrom in self.map:
+            ref_len, expected_query_chrom, query_len = self.map[ref_chrom]
+            if query_chrom == expected_query_chrom:
+                if ref_pos < ref_len:
+                    if query_pos < query_len:
+                        return_bool = True
+        return return_bool
 
-        return False
+
+
+
