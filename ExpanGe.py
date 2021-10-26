@@ -193,9 +193,10 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                 # Distance calculation for head of the inversion
                 if gene_sequence[x].inv_head is True:
                     next_index = find_next_not_inverted(gene_sequence, x)
+                    prev_index = find_prev_not_inverted(gene_sequence, x)
                     if next_index is not None:
-                        gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
-                        gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
+                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
