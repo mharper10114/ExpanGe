@@ -166,6 +166,26 @@ def find_next_valid(genes, index):
     return None
 
 
+def find_prev_head(genes, index):
+    """
+    Search function to find the previous head of the inversion for the tail calculation
+    :param genes: The gene sequence
+    :param index: The index of the current mum
+    :return: The index of the head
+    """
+    new_index = index - 1
+
+    if new_index < 0:
+        return None
+
+    while new_index >= 0:
+        if genes[new_index].inv_head is True:
+            return new_index
+        new_index = new_index - 1
+
+    return None
+
+
 def cutoff_check(val1, val2, cutoff):
     """
     Cutoff check function will check if the absolute value of delta_r or delta_q is
