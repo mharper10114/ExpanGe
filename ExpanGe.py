@@ -75,6 +75,7 @@ def identify_inversions(gene_sequence):
                             inv_flag = True
                             head_index = find_prev_valid(gene_sequence, x)
                             gene_sequence[head_index].inv_head = True
+                            gene_sequence[head_index].reversed = True
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
                     else:
@@ -165,6 +166,26 @@ def find_next_valid(genes, index):
     return None
 
 
+def find_prev_head(genes, index):
+    """
+    Search function to find the previous head of the inversion for the tail calculation
+    :param genes: The gene sequence
+    :param index: The index of the current mum
+    :return: The index of the head
+    """
+    new_index = index - 1
+
+    if new_index < 0:
+        return None
+
+    while new_index >= 0:
+        if genes[new_index].inv_head is True:
+            return new_index
+        new_index = new_index - 1
+
+    return None
+
+
 def cutoff_check(val1, val2, cutoff):
     """
     Cutoff check function will check if the absolute value of delta_r or delta_q is
@@ -192,25 +213,10 @@ def calculate_distances(gene_sequence, cutoff=1e6):
         if gene_sequence[x].ignore is False:
             # Distance calculation for non inverted mum
             if gene_sequence[x].reversed is False:
-                # Distance calculation for head of the inversion
-                if gene_sequence[x].inv_head is True:
-                    next_index = find_next_valid(gene_sequence, x)
-                    prev_index = find_prev_not_inverted(gene_sequence, x)
-                    if next_index is not None and prev_index is not None:
-                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
-                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
-                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-
-                        flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
-                        if flag:
-                            gene_sequence[x].delta_r = "--"
-                            gene_sequence[x].delta_q = "--"
-                            gene_sequence[x].delta_x = "--"
-
                 # Distance calculation for tail of the inversion
-                elif gene_sequence[x].inv_tail is True:
+                if gene_sequence[x].inv_tail is True:
                     non_inv = find_prev_not_inverted(gene_sequence, x)
-                    prev_index = find_prev_valid(gene_sequence, x)
+                    prev_index = find_prev_head(gene_sequence, x)
                     if prev_index is not None and non_inv is not None:
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
@@ -247,6 +253,11 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                             gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                             gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
                             gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
+                    # Distance calculation for head of the inversion
+                    elif gene_sequence[x].inv_head is True:
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
+                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
                     else:
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
