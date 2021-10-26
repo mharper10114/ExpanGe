@@ -54,6 +54,8 @@ class Gene:
         self.inv_head = False
         # Inversion tail flag
         self.inv_tail = False
+        # Last inversion flag
+        self.inv_last = False
 
 
 class GeneMap:
