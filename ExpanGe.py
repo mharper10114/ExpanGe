@@ -162,6 +162,18 @@ def find_next_valid(genes, index):
     return None
 
 
+def cutoff_check(val1, val2, cutoff):
+    """
+    Cutoff check function will check if the absolute value of delta_r or delta_q is
+    greater than the inputted cutoff value. This is to limit the number of same chromosome
+    tranpositions that are taken into account for the calculations
+    """
+    if abs(val1) >= cutoff or abs(val2) >= cutoff:
+        return True
+
+    return False
+
+
 def calculate_distances(gene_sequence,cutoff=1e6):
     """
     Function to calculate the distances between each gene in the coords file.
@@ -181,25 +193,13 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                     gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                     gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                     gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-                    """
-                    Add Cutoff check here if outside sensible size for cutoff then 
-                    Something like below.
-                    cutoff could also be designated based on some function of query length, though at this point 
-                    We can eye ball it for now.
-                    if abs(gene_sequence[x].delta_r) >= cutoff or abs(gene_sequence[x].delta_q) >= cutoff:
+
+                    flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
+                    if flag:
                         gene_sequence[x].delta_r = "--"
                         gene_sequence[x].delta_q = "--"
                         gene_sequence[x].delta_x = "--"
-                    """
-                else:
-                    """
-                    When the class is instantiated why not just set this as  the default, or create a 
-                    function that prints all None Type fields as designated output?
-                    """
 
-                    gene_sequence[x].delta_r = "--"
-                    gene_sequence[x].delta_q = "--"
-                    gene_sequence[x].delta_x = "--"
             # Distance calculations for inversions
             else:
                 # Distance calculation for head of the inversion
@@ -209,15 +209,13 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                         gene_sequence[x].delta_r = gene_sequence[next_index].start1 - gene_sequence[x].end1
                         gene_sequence[x].delta_q = gene_sequence[next_index].start2 - gene_sequence[x].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-                        """
-                        Add same cutoff check Looks like we will need a function
-                        
-                        """
 
-                    else:
-                        gene_sequence[x].delta_r = "--"
-                        gene_sequence[x].delta_q = "--"
-                        gene_sequence[x].delta_x = "--"
+                        flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
+                        if flag:
+                            gene_sequence[x].delta_r = "--"
+                            gene_sequence[x].delta_q = "--"
+                            gene_sequence[x].delta_x = "--"
+
                 # Distance calculation for tail of the inversion
                 elif gene_sequence[x].inv_tail is True:
                     previous_index = find_prev_not_inverted(gene_sequence, x)
@@ -225,13 +223,13 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-                        """
-                        Cutoff check here
-                        """
-                    else:
-                        gene_sequence[x].delta_r = "--"
-                        gene_sequence[x].delta_q = "--"
-                        gene_sequence[x].delta_x = "--"
+
+                        flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
+                        if flag:
+                            gene_sequence[x].delta_r = "--"
+                            gene_sequence[x].delta_q = "--"
+                            gene_sequence[x].delta_x = "--"
+
                 # Distance calculation for standard inverted mum
                 else:
                     next_index = find_next_valid(gene_sequence, x)
@@ -240,13 +238,12 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-                        """
-                        Cut Off check
-                        """
-                    else:
-                        gene_sequence[x].delta_r = "--"
-                        gene_sequence[x].delta_q = "--"
-                        gene_sequence[x].delta_x = "--"
+
+                        flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
+                        if flag:
+                            gene_sequence[x].delta_r = "--"
+                            gene_sequence[x].delta_q = "--"
+                            gene_sequence[x].delta_x = "--"
 
 
 def display_help():
@@ -272,8 +269,9 @@ def main(argv):
     output_name = "ExpanGeOutput.coords"
     sequence = []
     argument_list = argv
-    options = "hi:o:g:"
-    long_options = ["help", "input", "output", "geneMap"]
+    cutoff = 1000000
+    options = "hi:o:g:c:"
+    long_options = ["help", "input", "output", "geneMap", "cutoff"]
     gene_map = GeneMap()
     gene_map_filename = None
 
@@ -290,6 +288,8 @@ def main(argv):
                 gene_map_filename = current_value
             elif current_flag in ("-o", "--output"):
                 output_name = current_value
+            elif current_flag in ("-c", "--cutoff"):
+                cutoff = int(current_value)
 
     except getopt.error as err:
         print(str(err))
@@ -338,6 +338,9 @@ def main(argv):
             temp_gene.ref_chr = data_list[7]
             temp_gene.query_chr = data_list[8]
             temp_gene.inv_count = "--"
+            temp_gene.delta_r = "--"
+            temp_gene.delta_q = "--"
+            temp_gene.delta_x = "--"
 
         # checking if a transposition has taken place, if there has been, ignore the line
         # To Do: standarized file input, it looks like mums columns are differ based on output
@@ -355,23 +358,18 @@ def main(argv):
         else:
             start_positions.add(temp_gene.start1)
 
-        if temp_gene.ignore is True:
-            temp_gene.delta_r = "--"
-            temp_gene.delta_x = "--"
-            temp_gene.delta_q = "--"
-
         sequence.append(temp_gene)
 
         count = count + 1
 
     identify_inversions(sequence)
-    calculate_distances(sequence)
+    calculate_distances(sequence, cutoff)
 
     # Open the output file for writing, create it if it does not exist
     output = open(output_name, "w+")
 
     # Declare and initialize a pandas dataframe
-    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "tag", "scaffold", "delta_r", "delta_q", "delta_x", "inv_count"]
+    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
     dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
     dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
     dataframe.to_csv(output, sep="\t", index=False, header=True)
