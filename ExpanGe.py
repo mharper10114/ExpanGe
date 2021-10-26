@@ -73,7 +73,8 @@ def identify_inversions(gene_sequence):
                         if inv_flag is False:
                             inversion_count = inversion_count + 1
                             inv_flag = True
-                            gene_sequence[x].inv_head = True
+                            head_index = find_prev_valid(gene_sequence, x)
+                            gene_sequence[head_index].inv_head = True
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
                     else:
@@ -174,13 +175,14 @@ def cutoff_check(val1, val2, cutoff):
     return False
 
 
-def calculate_distances(gene_sequence,cutoff=1e6):
+def calculate_distances(gene_sequence, cutoff=1e6):
     """
     Function to calculate the distances between each gene in the coords file.
     If a gene's previous gene is invalid, it will find the closest valid gene to calculate the
     distance from.
     Utilizes a recursive helper function.
     :param gene_sequence: The data from the coords file
+    :param cutoff: Cutoff value
     :return: None
     """
 
@@ -188,20 +190,6 @@ def calculate_distances(gene_sequence,cutoff=1e6):
         if gene_sequence[x].ignore is False:
             # Distance calculation for non inverted mum
             if gene_sequence[x].reversed is False:
-                previous_index = find_prev_valid(gene_sequence, x)
-                if previous_index is not None:
-                    gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
-                    gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
-                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-
-                    flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
-                    if flag:
-                        gene_sequence[x].delta_r = "--"
-                        gene_sequence[x].delta_q = "--"
-                        gene_sequence[x].delta_x = "--"
-
-            # Distance calculations for inversions
-            else:
                 # Distance calculation for head of the inversion
                 if gene_sequence[x].inv_head is True:
                     next_index = find_next_not_inverted(gene_sequence, x)
@@ -230,13 +218,11 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
 
-                # Distance calculation for standard inverted mum
                 else:
-                    next_index = find_next_valid(gene_sequence, x)
-                    prev_index = find_prev_valid(gene_sequence, x)
-                    if next_index is not None:
-                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
-                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                    previous_index = find_prev_valid(gene_sequence, x)
+                    if previous_index is not None:
+                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
+                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
@@ -244,6 +230,22 @@ def calculate_distances(gene_sequence,cutoff=1e6):
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
+
+            # Distance calculations for inversions
+            else:
+                # Distance calculation for standard inverted mum
+                next_index = find_next_valid(gene_sequence, x)
+                prev_index = find_prev_valid(gene_sequence, x)
+                if next_index is not None:
+                    gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
+                    gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+
+                    flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
+                    if flag:
+                        gene_sequence[x].delta_r = "--"
+                        gene_sequence[x].delta_q = "--"
+                        gene_sequence[x].delta_x = "--"
 
 
 def display_help():
