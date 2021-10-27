@@ -15,19 +15,8 @@ from util import Gene, GeneMap
 
 """
 TO DO:
-- Implement way to detect head and tail of inversions for proper calculations (DONE)
-- Add way to splice away the header and add on new columns (DONE)
-- Clean up code (add comments, remove unnecessary code, remove old to do statements and comments)
-- Test program with larger file to determine runtime
-- Write display_help information
-- Write the Readme for the project
-- See if way to clean up the look of the output file
-- Find way to deal with outlier of data
-    - Diagonal chaining
-    - Average distance
-- Fix inverted distance calculations (DONE)
-- Gene Map implementation (EMAIL)
-- Make universal way to detect transpositions (DONE)
+- Fix the calculation for the inversion tail
+- Reset the inversion count value for when outliers are found
 """
 
 
@@ -76,6 +65,7 @@ def identify_inversions(gene_sequence):
                             head_index = find_prev_valid(gene_sequence, x)
                             gene_sequence[head_index].inv_head = True
                             gene_sequence[head_index].reversed = True
+                            gene_sequence[head_index].inv_count = "HEAD"
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
                     else:
@@ -83,6 +73,7 @@ def identify_inversions(gene_sequence):
                             gene_sequence[x].inv_tail = True
                             last_index = find_prev_valid(gene_sequence, x)
                             gene_sequence[last_index].inv_last = True
+                            gene_sequence[last_index].inv_count = "TAIL"
                         inv_flag = False
 
 
@@ -284,13 +275,13 @@ def display_help():
                 "for the reference and query sequences. In addition, the program identifies where inversions along the\n" \
                 "sequences exist and adjusts the calculations accordingly.\n" \
                 "\n" \
-                "USAGE: python3 -i <coordinates file> -g <gene map file> -o <output file> -c <cutoff value> -h <help>\n" \
+                "USAGE: python3 ExpanGe.py -i <coordinates file> -g <gene map file> -o <output file> -c <cutoff value> -h <help>\n" \
                 "\n" \
                 "-h (--help)        Displays help information\n" \
                 "-i (--input)       Input the filename for the coordinates file\n" \
                 "-g (--genemap)     Input the filename for the gene map file\n" \
                 "-o (--output)      Input the filename for the output file that is created\n" \
-                "-c (--cutoff)      Sets the cutoff value for outlier calculations (Default is 1000000\n" \
+                "-c (--cutoff)      Sets the cutoff value for outlier calculations (Default is 1000000)\n" \
                 "\n" \
                 "NOTE: No sorting is done in program, calculations will be made based on order of inputted file.\n" \
                 "The inputted coordinates file should be sorted in ascending order of the reference starting position\n" \
