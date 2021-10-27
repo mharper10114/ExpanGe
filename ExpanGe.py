@@ -156,7 +156,7 @@ def find_next_valid(genes, index):
 
 def find_prev_last_inv(genes, index):
     """
-    Search function to find the previous head of the inversion for the tail calculation
+    Search function to find the value for the last inverted mum
     :param genes: The gene sequence
     :param index: The index of the current mum
     :return: The index of the head
@@ -168,6 +168,26 @@ def find_prev_last_inv(genes, index):
 
     while new_index >= 0:
         if genes[new_index].inv_head is False and genes[new_index].reversed is False:
+            return new_index
+        new_index = new_index - 1
+
+    return None
+
+
+def find_prev_head(genes, index):
+    """
+    Search function to find the previous head of the inversion for the tail calculation
+    :param genes: The gene sequence
+    :param index: The index of the current mum
+    :return: The index of the head
+    """
+    new_index = index - 1
+
+    if new_index < 0:
+        return None
+
+    while new_index >= 0:
+        if genes[new_index].inv_head is True:
             return new_index
         new_index = new_index - 1
 
