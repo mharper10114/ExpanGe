@@ -64,16 +64,17 @@ def identify_inversions(gene_sequence):
                             inv_flag = True
                             head_index = find_prev_valid(gene_sequence, x)
                             gene_sequence[head_index].inv_head = True
-                            gene_sequence[head_index].reversed = True
-                            gene_sequence[head_index].inv_count = "HEAD"
                         gene_sequence[x].reversed = True
                         gene_sequence[x].inv_count = inversion_count
                     else:
                         if inv_flag is True:
                             gene_sequence[x].inv_tail = True
+                            gene_sequence[x].inv_count = "TAIL"
+                            """
                             last_index = find_prev_valid(gene_sequence, x)
                             gene_sequence[last_index].inv_last = True
-                            gene_sequence[last_index].inv_count = "TAIL"
+                            gene_sequence[last_index].inv_count = "LAST"
+                            """
                         inv_flag = False
 
 
@@ -219,6 +220,13 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
 
+                elif gene_sequence[x].inv_head is True:
+                    prev_index = find_prev_valid(gene_sequence, x)
+                    next_index = find_next_valid(gene_sequence, x)
+                    gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
+                    gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+
                 else:
                     previous_index = find_prev_valid(gene_sequence, x)
                     if previous_index is not None:
@@ -238,21 +246,10 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                 next_index = find_next_valid(gene_sequence, x)
                 prev_index = find_prev_valid(gene_sequence, x)
                 if next_index is not None and prev_index is not None:
-                    if gene_sequence[x].inv_last is True:
-                        non_inv = find_prev_not_inverted(gene_sequence, x)
-                        if non_inv is not None:
-                            gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
-                            gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
-                            gene_sequence[x].delta_x = gene_sequence[x].delta_r - gene_sequence[x].delta_q
                     # Distance calculation for head of the inversion
-                    elif gene_sequence[x].inv_head is True:
-                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
-                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
-                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
-                    else:
-                        gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
-                        gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
-                        gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
+                    gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
+                    gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
+                    gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                     flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                     if flag:
