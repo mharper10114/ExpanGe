@@ -10,4 +10,4 @@ With the increasing availability of chromosome level assemblies investigations o
 ExpanGe takes as input the output of MUMmer and calculates the change delta delta between reference and query. It correctly handles calculations for delta delta at the borders of inversions and within inversions.  At present ExanGe requires 1 to 1 chromsome correspondance.
 
 ## Delta Delta Calculation
-![delta delta figure]()
+![delta delta figure](https://github.com/mharper10114/ExpanGe/blob/master/media/deltadelta.png)
