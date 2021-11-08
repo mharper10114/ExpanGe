@@ -3,7 +3,7 @@ A bioinformatics tool to analyze gene expansion
 
 # Introduction
 
-With the increasing availability of chromosome level assemblies investigations of structral variation within newly sequenced genomes of is becoming commonplace. Popular approaches like [JCVI](https://github.com/tanghaibao/jcvi) and [COGE](https://genomevolution.org/coge/) detect syntentic regions between a query and reference genome using genes as anchors for whole genome alignment. [MUMmer](http://mummer.sourceforge.net/) employs a gene free prediction strategy that can be applied independent of annotation. It detects syntey through areas of sequence similiarity between reference and query genomes. Its anchors are called mums.
+With the increasing availability of chromosome level assemblies investigations of structral variation within newly sequenced genomes of is becoming commonplace. Popular approaches like [JCVI](https://github.com/tanghaibao/jcvi) and [COGE](https://genomevolution.org/coge/) detect syntentic regions between a query and reference genome using genes as anchors for whole genome alignment. [MUMmer](http://mummer.sourceforge.net/) employs a gene free prediction strategy that can be applied independent of annotation. It detects syntey through areas of sequence similiarity between reference and query genomes. Its anchors are called mums. Using MUMmer allows the researcher to employ the different search methods included in MUMmer but still produce a consistent and predictable output.
 
 # Method
 
@@ -11,3 +11,17 @@ ExpanGe takes as input the output of MUMmer and calculates the change delta delt
 
 ## Delta Delta Calculation
 ![delta delta figure](https://github.com/mharper10114/ExpanGe/blob/master/media/deltadelta.png)
+
+
+#MUMmer
+
+## Running `nucmer` for Closely Related Organisms
+
+* Start with `nucmer` run. The `--mum` flag is the most important flag since it will reduce redundancy in sequence matches. `-p` and fasta names are flexible and user defined and will not affect `ExpanGe`
+
+```
+nucmer --mum --coords -p A_ref_B_query   A.fasta  B.fasta 
+```
+*
+
+
