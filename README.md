@@ -13,7 +13,7 @@ ExpanGe takes as input the output of MUMmer and calculates the change delta delt
 ![delta delta figure](https://github.com/mharper10114/ExpanGe/blob/master/media/deltadelta.png)
 
 
-#MUMmer
+# MUMmer
 
 ## Running Nucmer for Closely Related Organisms
 
