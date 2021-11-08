@@ -15,9 +15,9 @@ ExpanGe takes as input the output of MUMmer and calculates the change delta delt
 
 #MUMmer
 
-## Running `nucmer` for Closely Related Organisms
+## Running Nucmer for Closely Related Organisms
 
-* Start with `nucmer` run. The `--mum` flag is the most important flag since it will reduce redundancy in sequence matches. `-p` and fasta names are flexible and user defined and will not affect `ExpanGe`
+* Start by running `nucmer`. The `--mum` flag is the most important flag since it will reduce redundancy in sequence matches. `-p` and fasta names are flexible and user defined and will not affect `ExpanGe`
 
 ```
 nucmer --mum --coords -p A_ref_B_query   A.fasta  B.fasta 
