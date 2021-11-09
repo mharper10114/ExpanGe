@@ -47,7 +47,7 @@ sequences exist and adjusts the calculations accordingly.
                 
 USAGE: python3 ExpanGe.py -i <coordinates file> -g <gene map file> -o <output file> -c <cutoff value> -h <help>
 
-                 -h (--help)        Displays help information
+                -h (--help)        Displays help information
                 -i (--input)       Input the filename for the coordinates file
                 -g (--genemap)     Input the filename for the gene map file
                 -o (--output)      Input the filename for the output file that is created
