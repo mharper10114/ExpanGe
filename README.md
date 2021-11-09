@@ -13,7 +13,9 @@ With the increasing availability of chromosome level assemblies investigations o
 ![delta delta figure](https://github.com/mharper10114/ExpanGe/blob/master/media/deltadelta2.png)
 
 ----------------------------------------
-# MUMmer
+# Making Preliminary Files
+
+## MUMmer
 
 ## Running Nucmer for Closely Related Organisms
 
@@ -35,6 +37,25 @@ nucmer --mum --coords -p A_ref_B_query   A.fasta  B.fasta
   *  `-L <int>` : Filter alignments by length, it must be greater than value **Optional**
 
 ------------------------------------
+
+## Gene Map 
+
+Is a user generated, tab separated file that `ExpanGe` uses to determine which mums are are between homologous chromosomes.
+
+```
+Example: ref_chrom  ref_len  query_chrom query_len
+    chr1  2000  ChR1A  3000
+    chr2  4500  ChR3A  6003
+    ...
+```
+
+* `ref_chrom` :: <str> name given by user can be anything but must exactly match the name that appears in mum file
+* `ref_len` :: <int> length of sequence/contig/chromosome
+* `query_chrom` :: <str> name given by user can be anything but must exactly match the name that appears in mum file
+* `query_len` :: <int>  length of sequence/contig/chromsome
+
+
+
 
 # ExpanGe 
 ExpanGe is a bioinformatics tool that is used to analyze gene expansion and contraction.
