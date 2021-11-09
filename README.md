@@ -23,6 +23,20 @@ With the increasing availability of chromosome level assemblies investigations o
 nucmer --mum --coords -p A_ref_B_query   A.fasta  B.fasta 
 ```
 
-*
+* Produce output for `ExpanGE`
+
+```
+ show-coords -H -T -r -b -L 100  A_ref_B_query.delta  > A_ref_B_query.HTrbL100.coords
+```
+  *  `-H` : No header **Required**
+  *  `-T` : Tab delimited **Required**
+  *  `-r` : Sort by Reference **Required**
+  *  `-b` : Non-redundant alignments only **Optional**
+  *  `-L <int>` : Filter alignments by length, it must be greater than value **Optional**
+
+===========================================================================================================================
+
+# ExpanGe 
+
 
 
