@@ -12,7 +12,7 @@ With the increasing availability of chromosome level assemblies investigations o
 ## Delta Delta Calculation
 ![delta delta figure](https://github.com/mharper10114/ExpanGe/blob/master/media/deltadelta2.png)
 
-
+----------------------------------------
 # MUMmer
 
 ## Running Nucmer for Closely Related Organisms
@@ -34,7 +34,7 @@ nucmer --mum --coords -p A_ref_B_query   A.fasta  B.fasta
   *  `-b` : Non-redundant alignments only **Optional**
   *  `-L <int>` : Filter alignments by length, it must be greater than value **Optional**
 
-===========================================================================================================================
+------------------------------------
 
 # ExpanGe 
 
