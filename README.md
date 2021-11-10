@@ -1,4 +1,4 @@
-# ExpanGe
+![ExpanGe Bringing Genomic Expansion into focus]()
 A bioinformatics tool to analyze gene expansion
 
 # Introduction
