@@ -1,5 +1,5 @@
 ![ExpanGe Bringing Genomic Expansion into focus](https://github.com/mharper10114/ExpanGe/blob/master/media/ExapanGe_logo3.png)
-ExpanGe is bringing genomic expansions into focus. A bioinformatics tool to analyze gene expansion
+### ExpanGe is bringing genomic expansions into focus. A bioinformatics tool to analyze gene expansion
 
 # Introduction
 
