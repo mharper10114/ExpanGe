@@ -13,7 +13,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
-   sodipodi:docname="ExapanGe_logo.svg">
+   sodipodi:docname="ExapanGe_logo.svg"
+   inkscape:export-filename="/Users/hallna12/OneDrive - Michigan State University/ExpanGe/ExapanGe_logo.png"
+   inkscape:export-xdpi="800"
+   inkscape:export-ydpi="800">
   <defs
      id="defs2">
     <filter
@@ -51,7 +54,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.4419847"
-     inkscape:cx="83.811611"
+     inkscape:cx="5.6697982"
      inkscape:cy="80.872194"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -83,6 +86,13 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(7.7486038e-7,-123.81903)">
+    <rect
+       style="fill:#ffffff;stroke:#2d9300;stroke-width:0.599056;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
+       id="rect991"
+       width="64.404762"
+       height="48.755802"
+       x="0.32103926"
+       y="124.11856" />
     <circle
        style="fill:none;stroke:#2d9300;stroke-width:0.624704;stroke-linejoin:round;stroke-opacity:1;filter:url(#filter915)"
        id="path833"
@@ -121,12 +131,5 @@
        cy="148.22913"
        r="16.332153"
        transform="matrix(0.57260304,0,0,0.57260304,-29.849231,63.623552)" />
-    <rect
-       style="fill:none;stroke:#2d9300;stroke-width:0.599056;stroke-linejoin:round;stroke-opacity:1"
-       id="rect991"
-       width="64.404762"
-       height="48.755802"
-       x="0.32103926"
-       y="124.11856" />
   </g>
 </svg>
