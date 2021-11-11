@@ -12,9 +12,6 @@ class Accession :
         self.homolog = None
 
 
-
-
-
 def parse_fasta(fasta):
     with open(fasta) as f:
         genome = f.read().rstrip('>').split('>')
