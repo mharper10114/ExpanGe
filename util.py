@@ -104,10 +104,10 @@ class GeneMap:
         count = 0 # looks like this being done skip a header. We can do this by slicing lines  as well. But I don't want
                   # to mess with this too much just yet.
 
-        for line in lines:
-            if count != 0:
-                #chrom = "Chr" + str(count)
-                #chrom will go unused  in this version
+        for l in lines:
+            line = l.split('#')[0]
+            if len(line.replace(' ','')) > 0 :
+                #parser is comment semi-aware
                 line_data = line.split()
                 temp_ref_chrom = line_data[0]
                 temp_ref = int(line_data[1])
