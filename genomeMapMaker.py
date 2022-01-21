@@ -5,35 +5,14 @@ File: genomeMapMaker.py
 Program takes in .coords file and the orginal fasta files and produces a genome map file for use by ExpanGe.py
 Currently, ExpanGe.py only makes 1 to 1 comparisons.
 """
-import os
 import sourmash
 import argparse
 
-
-class Accession :
-    def __init__(self):
-        self.length = None
-        self.homolog = None
-        self.kmerhash = None
-        self.containment_scores = []
-
-
-def parse_fasta(fasta):
-    with open(fasta) as f:
-        genome = f.read().lstrip('>').split('>')
-    return genome
-
-def parse_accesion(acc,accession_lens):
-    accession = acc.splitlines()
-    header = accession[0].split(' ')[0]
-    assert header not in accession_lens, f'{header} is repeated twice in input file. Accession names must be unique'
-    seq = ''.join(accession[1:])
-    return (header,seq)
-
+from util import Accession, parse_fasta, parse_accesion
 
 
 def update_accession_lens(acc, accession_lens,cutoff=1e5):
-    header,seq = parse_accesion(acc,accession_lens)
+    header,seq = parse_accesion(acc, accession_lens)
     seq_len = len(seq)
     if seq_len >= cutoff:
 
@@ -53,7 +32,7 @@ def parse_query(query,accession_lens,query_cutoff):
     for acc in query:
         max_key = []
         max_jaccard_value = 0
-        header,seq = parse_accesion(acc,accession_lens)
+        header,seq = parse_accesion(acc, accession_lens)
         seq_len = len(seq)
         if seq_len > query_cutoff :
             qadded.append(header)

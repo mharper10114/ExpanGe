@@ -140,5 +140,23 @@ class GeneMap:
         return return_bool
 
 
+class Accession :
+    def __init__(self):
+        self.length = None
+        self.homolog = None
+        self.kmerhash = None
+        self.containment_scores = []
 
 
+def parse_fasta(fasta):
+    with open(fasta) as f:
+        genome = f.read().lstrip('>').split('>')
+    return genome
+
+
+def parse_accesion(acc,accession_lens):
+    accession = acc.splitlines()
+    header = accession[0].split(' ')[0]
+    assert header not in accession_lens, f'{header} is repeated twice in input file. Accession names must be unique'
+    seq = ''.join(accession[1:])
+    return (header,seq)
