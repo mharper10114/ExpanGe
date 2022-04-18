@@ -412,7 +412,7 @@ def main(argv):
             temp_gene.length2 = int(data_list[5])
             temp_gene.IDY = data_list[6]
 
-            if length_flag:
+            if length_flag is False:
                 temp_gene.ref_chr = data_list[7]
                 temp_gene.query_chr = data_list[8]
             else:
