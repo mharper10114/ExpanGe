@@ -337,10 +337,11 @@ def main(argv):
     sequence = []
     argument_list = argv
     cutoff = 1000000
-    options = "hi:o:g:c:"
-    long_options = ["help", "input", "output", "geneMap", "cutoff"]
+    options = "hi:o:g:c:l:"
+    long_options = ["help", "input", "output", "geneMap", "cutoff", "length"]
     gene_map = GeneMap()
     gene_map_filename = None
+    length_flag = False
 
     try:
         flags, values = getopt.getopt(argument_list, options, long_options)
@@ -357,6 +358,8 @@ def main(argv):
                 output_name = current_value
             elif current_flag in ("-c", "--cutoff"):
                 cutoff = int(current_value)
+            elif current_flag in ("-l", "--length"):
+                length_flag = True
 
     except getopt.error as err:
         print(str(err))
@@ -402,8 +405,16 @@ def main(argv):
             temp_gene.length1 = int(data_list[4])
             temp_gene.length2 = int(data_list[5])
             temp_gene.IDY = data_list[6]
-            temp_gene.ref_chr = data_list[7]
-            temp_gene.query_chr = data_list[8]
+
+            if length_flag:
+                temp_gene.ref_chr = data_list[7]
+                temp_gene.query_chr = data_list[8]
+            else:
+                temp_gene.temp_length1 = data_list[7]
+                temp_gene.temp_length2 = data_list[8]
+                temp_gene.ref_chr = data_list[9]
+                temp_gene.query_chr = data_list[10]
+                
             temp_gene.inv_count = "--"
             temp_gene.delta_r = "--"
             temp_gene.delta_q = "--"
