@@ -234,6 +234,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
+                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -249,6 +250,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
+                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -263,6 +265,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
+                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -284,6 +287,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
 
                             flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                             if flag:
+                                print("Flag")
                                 gene_sequence[x].delta_r = "--"
                                 gene_sequence[x].delta_q = "--"
                                 gene_sequence[x].delta_x = "--"
@@ -296,6 +300,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
+                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
