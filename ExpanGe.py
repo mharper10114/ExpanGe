@@ -219,6 +219,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
     print("Enters calculate distances")
     for x in range(len(gene_sequence)):
         if gene_sequence[x].ignore is False:
+            print("gene_sequence[x].ignore is False")
             # Distance calculation for non inverted mum
             if gene_sequence[x].reversed is False:
                 # Distance calculation for tail of the inversion
@@ -433,6 +434,7 @@ def main(argv):
                                              query_chrom=temp_gene.query_chr,
                                              query_pos=temp_gene.start2)
         if same_flag is False:
+            print("Same flag")
             temp_gene.ignore = True
 
         # checking for multiples of genes
