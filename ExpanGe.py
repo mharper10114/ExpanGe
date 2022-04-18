@@ -216,7 +216,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
     :param cutoff: Cutoff value
     :return: None
     """
-
+    print("Enters calculate distances")
     for x in range(len(gene_sequence)):
         if gene_sequence[x].ignore is False:
             # Distance calculation for non inverted mum
@@ -226,6 +226,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     non_inv = find_prev_not_inverted(gene_sequence, x)
                     prev_index = find_prev_head(gene_sequence, x)
                     if prev_index is not None and non_inv is not None:
+                        print("Tail calulcation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
@@ -240,6 +241,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     prev_index = find_prev_valid(gene_sequence, x)
                     next_index = find_next_valid(gene_sequence, x)
                     if prev_index is not None and next_index is not None:
+                        print("Head calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
@@ -253,6 +255,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                 else:
                     previous_index = find_prev_valid(gene_sequence, x)
                     if previous_index is not None:
+                        print("Normal calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
@@ -273,6 +276,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     if gene_sequence[x].inv_last is True:
                         non_inv = find_prev_last_inv(gene_sequence, x)
                         if non_inv is not None:
+                            print("Last inv calculation")
                             gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                             gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
                             gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
@@ -284,6 +288,7 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                                 gene_sequence[x].delta_x = "--"
                     # Distance calculation for standard inversion
                     else:
+                        print("Inverted calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
@@ -337,7 +342,7 @@ def main(argv):
     sequence = []
     argument_list = argv
     cutoff = 1000000
-    options = "hi:o:g:c:l:"
+    options = "hi:o:g:c:l"
     long_options = ["help", "input", "output", "geneMap", "cutoff", "length"]
     gene_map = GeneMap()
     gene_map_filename = None
@@ -414,7 +419,7 @@ def main(argv):
                 temp_gene.temp_length2 = data_list[8]
                 temp_gene.ref_chr = data_list[9]
                 temp_gene.query_chr = data_list[10]
-                
+
             temp_gene.inv_count = "--"
             temp_gene.delta_r = "--"
             temp_gene.delta_q = "--"
@@ -432,6 +437,7 @@ def main(argv):
 
         # checking for multiples of genes
         if temp_gene.start1 in start_positions:
+            print("Makes ignore")
             temp_gene.ignore = True
         else:
             start_positions.add(temp_gene.start1)
