@@ -135,6 +135,11 @@ class GeneMap:
         """
         return_bool = False
         if ref_chrom in self.map:
+            print("BREAK________________")
+            print("Ref_len: ", ref_len)
+            print("Expec Queyr: ", expected_query_chrom)
+            print("query len: ", query_len)
+            print("MAP: ", self.map[ref_chrom])
             ref_len, expected_query_chrom, query_len = self.map[ref_chrom]
             if query_chrom == expected_query_chrom:
                 if ref_pos < ref_len:
