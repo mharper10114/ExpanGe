@@ -216,10 +216,8 @@ def calculate_distances(gene_sequence, cutoff=1e6):
     :param cutoff: Cutoff value
     :return: None
     """
-    print("Enters calculate distances")
     for x in range(len(gene_sequence)):
         if gene_sequence[x].ignore is False:
-            print("gene_sequence[x].ignore is False")
             # Distance calculation for non inverted mum
             if gene_sequence[x].reversed is False:
                 # Distance calculation for tail of the inversion
@@ -227,14 +225,12 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     non_inv = find_prev_not_inverted(gene_sequence, x)
                     prev_index = find_prev_head(gene_sequence, x)
                     if prev_index is not None and non_inv is not None:
-                        print("Tail calulcation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
-                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -243,14 +239,12 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     prev_index = find_prev_valid(gene_sequence, x)
                     next_index = find_next_valid(gene_sequence, x)
                     if prev_index is not None and next_index is not None:
-                        print("Head calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
-                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -258,14 +252,12 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                 else:
                     previous_index = find_prev_valid(gene_sequence, x)
                     if previous_index is not None:
-                        print("Normal calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[previous_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[previous_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
-                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -280,27 +272,23 @@ def calculate_distances(gene_sequence, cutoff=1e6):
                     if gene_sequence[x].inv_last is True:
                         non_inv = find_prev_last_inv(gene_sequence, x)
                         if non_inv is not None:
-                            print("Last inv calculation")
                             gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                             gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[non_inv].end2
                             gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                             flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                             if flag:
-                                print("Flag")
                                 gene_sequence[x].delta_r = "--"
                                 gene_sequence[x].delta_q = "--"
                                 gene_sequence[x].delta_x = "--"
                     # Distance calculation for standard inversion
                     else:
-                        print("Inverted calculation")
                         gene_sequence[x].delta_r = gene_sequence[x].start1 - gene_sequence[prev_index].end1
                         gene_sequence[x].delta_q = gene_sequence[x].start2 - gene_sequence[next_index].end2
                         gene_sequence[x].delta_x = gene_sequence[x].delta_q - gene_sequence[x].delta_r
 
                         flag = cutoff_check(gene_sequence[x].delta_r, gene_sequence[x].delta_q, cutoff)
                         if flag:
-                            print("Flag")
                             gene_sequence[x].delta_r = "--"
                             gene_sequence[x].delta_q = "--"
                             gene_sequence[x].delta_x = "--"
@@ -439,12 +427,10 @@ def main(argv):
                                              query_chrom=temp_gene.query_chr,
                                              query_pos=temp_gene.start2)
         if same_flag is False:
-            print("Same flag")
             temp_gene.ignore = True
 
         # checking for multiples of genes
         if temp_gene.start1 in start_positions:
-            print("Makes ignore")
             temp_gene.ignore = True
         else:
             start_positions.add(temp_gene.start1)
@@ -460,10 +446,16 @@ def main(argv):
     output = open(output_name, "w+")
 
     # Declare and initialize a pandas dataframe
-    fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
-    dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
-    dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
-    dataframe.to_csv(output, sep="\t", index=False, header=True)
+    if length_flag is False:
+        fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
+        dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
+        dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
+        dataframe.to_csv(output, sep="\t", index=False, header=True)
+    else:
+        fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_seq", "qry_seq", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
+        dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
+        dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
+        dataframe.to_csv(output, sep="\t", index=False, header=True)
 
 
 if __name__ == "__main__":
