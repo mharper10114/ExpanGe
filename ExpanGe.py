@@ -452,7 +452,7 @@ def main(argv):
         dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
         dataframe.to_csv(output, sep="\t", index=False, header=True)
     else:
-        fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_seq", "qry_seq", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
+        fields = ["start1", "end1", "start2", "end2", "length1", "length2", "IDY", "ref_seq", "query_seq", "ref_chr", "query_chr", "delta_r", "delta_q", "delta_x", "inv_count"]
         dataframe = pd.DataFrame([vars(f) for f in sequence], columns=fields)
         dataframe.rename(columns={"delta_r": "Delta R", "delta_q": "Delta Q", "delta_x": "Delta X", "inv_count": "Inversion Count"})
         dataframe.to_csv(output, sep="\t", index=False, header=True)

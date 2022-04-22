@@ -56,9 +56,10 @@ class Gene:
         self.inv_tail = False
         # Last inversion flag
         self.inv_last = False
-        # Temp
-        self.temp_length1 = None
-        self.temp_length2 = None
+        # Reference sequence length
+        self.ref_seq = None
+        # Query sequence length
+        self.query_seq = None
 
 
 class GeneMap:
